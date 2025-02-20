@@ -1,0 +1,2355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nastavitve</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/4b2fb84d86.js" crossorigin="anonymous"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/css/emojimart.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+    <script src="https://unpkg.com/@joeattardi/emoji-button@4.6.0/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gifler@0.1.0/gifler.min.js"></script>
+    <!-- Add these in the head section, after other CSS/JS imports -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add this in the head section -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // This is important!
+            theme: {
+                extend: {
+                    animation: {
+                        gradient: 'gradient 3s ease infinite',
+                        scale: 'scale 200ms ease-in-out',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-position': '0% 50%'
+                            },
+                            '50%': {
+                                'background-position': '100% 50%'
+                            },
+                        },
+                        scale: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.25)' },
+                            '100%': { transform: 'scale(1)' }
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Add this script right after the opening <html> tag -->
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+        <script>
+        // Mobile menu functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const spans = hamburgerIcon.querySelectorAll('span');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Transform to X
+                    spans[0].classList.add('translate-y-0', 'rotate-45');
+                    spans[1].classList.add('opacity-0');
+                    spans[2].classList.add('translate-y-0', '-rotate-45');
+                    
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                    
+                    // Reset to hamburger
+                    spans[0].classList.remove('translate-y-0', 'rotate-45');
+                    spans[1].classList.remove('opacity-0');
+                    spans[2].classList.remove('translate-y-0', '-rotate-45');
+                }
+            }
+
+            // Toggle menu on button click
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMenu();
+            });
+    
+                // Close menu when clicking outside, but exclude theme toggles and language selector
+                document.addEventListener('click', (e) => {
+                    const isThemeToggle = e.target.closest('[id^="mobile-theme-toggle-"]');
+                    const isLanguageSelector = e.target.closest('#mobile-language-button, #mobile-language-dropdown');
+                    
+                    if (isMenuOpen && 
+                        !mobileMenu.contains(e.target) && 
+                        !mobileMenuButton.contains(e.target) && 
+                        !isThemeToggle && 
+                        !isLanguageSelector) {
+                        toggleMenu();
+                    }
+                });
+    
+                // Handle mobile language dropdown
+                const mobileLangButton = document.getElementById('mobile-language-button');
+                const mobileLangDropdown = document.getElementById('mobile-language-dropdown');
+                const mobileSelectedFlag = document.getElementById('mobile-selected-flag');
+                const mobileSelectedLanguage = document.getElementById('mobile-selected-language');
+                
+                mobileLangButton.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileLangDropdown.classList.toggle('hidden');
+                });
+    
+                // Handle language selection
+                mobileLangDropdown.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const flagImg = button.querySelector('img');
+                        const langText = button.querySelector('span');
+    
+                        // Update button content
+                        mobileSelectedFlag.src = flagImg.src;
+                        mobileSelectedFlag.alt = langText.textContent;
+                        mobileSelectedLanguage.textContent = langText.textContent;
+    
+                        // Close only the language dropdown
+                        mobileLangDropdown.classList.add('hidden');
+                    });
+                });
+    
+                // Close only language dropdown when clicking outside of it
+                document.addEventListener('click', (e) => {
+                    if (!mobileLangButton.contains(e.target) && !mobileLangDropdown.contains(e.target)) {
+                        mobileLangDropdown.classList.add('hidden');
+                    }
+                });
+    
+           // Theme initialization
+           document.addEventListener('DOMContentLoaded', () => {
+            const themeToggles = {
+                light: ['theme-toggle-light', 'mobile-theme-toggle-light'],
+                dark: ['theme-toggle-dark', 'mobile-theme-toggle-dark'],
+                system: ['theme-toggle-system', 'mobile-theme-toggle-system']
+            };
+
+            function updateButtonStates(theme) {
+                // Remove active class from all buttons
+                Object.values(themeToggles).flat().forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) btn.classList.remove('active');
+                });
+                
+                // Add active class to selected theme buttons
+                themeToggles[theme]?.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) {
+                        btn.classList.add('active');
+                        // Add pop animation
+                        const svg = btn.querySelector('svg');
+                        svg.style.animation = 'none';
+                        svg.offsetHeight; // Trigger reflow
+                        svg.style.animation = null;
+                    }
+                });
+            }
+
+            function setTheme(theme) {
+                if (theme === 'system') {
+                    localStorage.removeItem('theme');
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                } else {
+                    localStorage.theme = theme;
+                    if (theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+                
+                updateButtonStates(theme);
+            }
+
+            // Initialize theme
+            const currentTheme = localStorage.theme || 'system';
+            setTheme(currentTheme);
+
+            // Add click handlers
+            Object.entries(themeToggles).forEach(([theme, ids]) => {
+                ids.forEach(id => {
+                    const btn = document.getElementById(id);
+                    if (btn) {
+                        btn.addEventListener('click', () => setTheme(theme));
+                    }
+                });
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.theme) {
+                    setTheme('system');
+                }
+            });
+        });
+    
+                // Add this to prevent zoom on double tap
+                let lastTap = 0;
+                
+                mobileMenuButton.addEventListener('touchend', function(e) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    
+                    if (tapLength < 500 && tapLength > 0) {
+                        e.preventDefault();
+                    }
+                    lastTap = currentTime;
+                });
+            });
+    
+            // Add this to prevent zoom on double tap
+            document.addEventListener('DOMContentLoaded', function() {
+                // Prevent zoom on double tap
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                let lastTap = 0;
+                
+                mobileMenuButton.addEventListener('touchend', function(e) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    
+                    if (tapLength < 500 && tapLength > 0) {
+                        e.preventDefault();
+                    }
+                    lastTap = currentTime;
+                });
+                
+                // Add meta viewport tag to prevent zooming
+                const meta = document.createElement('meta');
+                meta.name = 'viewport';
+                meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+                document.head.appendChild(meta);
+            });
+        </script>
+    <!-- Add this style to ensure hashtags can't be formatted -->
+    <style>
+    .hashtag {
+        color: #AE559A !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        pointer-events: none;
+        user-select: none;
+    }
+    </style>
+</head>
+<style>
+
+.montserrat{
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+/* Add these new animations */
+@keyframes rotateIn {
+    0% { 
+        transform: rotate(-180deg) scale(0.3);
+        opacity: 0;
+    }
+    100% { 
+        transform: rotate(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateOut {
+    0% { 
+        transform: rotate(0) scale(1);
+        opacity: 1;
+    }
+    100% { 
+        transform: rotate(180deg) scale(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% { 
+        transform: translateY(-10px) scale(0.9);
+        opacity: 0;
+    }
+    100% { 
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+.theme-toggle-btn {
+    position: relative;
+    overflow: hidden;
+    color: #6B7280; /* Default color */
+    background: transparent;
+}
+
+/* Active state */
+.theme-toggle-btn.active {
+    color: #40BBD1 !important; /* Primary color when active */
+    background: rgba(64, 187, 209, 0.1) !important; /* Light primary color background */
+}
+
+/* Hover effects */
+.theme-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.theme-toggle-btn:active::before {
+    opacity: 0.1;
+}
+
+/* Update background transition */
+.theme-toggle-btn {
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1); /* Faster, smoother transition */
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(1px);
+}
+/* Add these new styles for format buttons */
+.format-active {
+    background-color: #40BBD1 !important;
+    color: white !important;
+}
+
+.format-active i {
+    color: white !important;
+}
+
+/* Add these new styles for post dropdown */
+.post-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 2px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+}
+
+.dark .post-dropdown {
+    background-color: #2F2E72;
+    border-color: #374151;
+}
+
+.post-dropdown.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Add these new styles for post menu button active state */
+.post-menu-btn.active {
+    background-color: rgb(0 0 0 / 0.05);
+}
+
+.dark .post-menu-btn.active {
+    background-color: rgb(255 255 255 / 0.1);
+}
+
+/* Add these new styles for like button interactions */
+.like-count-wrapper {
+    @apply flex items-center cursor-pointer;
+}
+
+.like-button {
+    @apply flex items-center group hover:bg-[#BC71AD]/10 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.like-icon {
+    @apply size-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out text-lg;
+}
+
+.like-count {
+    @apply ml-1 transition-colors duration-300;
+}
+
+/* Hover styles for inactive state */
+.like-count-wrapper:not(.active):hover .like-icon i,
+.like-count-wrapper:not(.active):hover .like-count {
+    @apply text-[#BC71AD];
+}
+
+/* Comment button styles */
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-icon i,
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-count {
+    @apply hover:text-[#40BBD1];
+}
+
+.like-count-wrapper.hover\:text-\[\#40BBD1\]:hover .like-icon {
+    @apply text-[#40BBD1];
+}
+
+.like-count-wrapper.hover\:text-\[\#40BBD1\]:hover .like-count {
+    @apply text-[#40BBD1];
+}
+
+/* Add these new styles for like button interactions */
+.like-count-wrapper.active .like-icon i {
+    @apply text-[#BC71AD] fa-solid !important;
+    color: #BC71AD !important; /* Force the color */
+}
+
+.like-count-wrapper.active .like-count {
+    @apply text-[#BC71AD] !important;
+    color: #BC71AD !important; /* Force the color */
+}
+
+/* Add this single, more specific style for active state */
+article .like-count-wrapper.active {
+    .like-icon i {
+        @apply text-[#BC71AD] fa-solid !important;
+    }
+    .like-count {
+        @apply text-[#BC71AD] !important;
+    }
+}
+
+/* Remove any existing theme-toggle-btn transitions */
+</style>
+
+<!-- Update the style section for like animation -->
+<style>
+/* Update the like button animation styles */
+.like-icon i {
+    transform-origin: center;
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms ease-in-out;
+}
+
+/* Update the active state animation */
+.like-count-wrapper.active .like-icon i {
+    animation: likePopScale 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Add new keyframes for like pop animation */
+@keyframes likePopScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Rest of your existing styles remain the same */
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] {
+    transition: color 150ms ease-in-out;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"]:hover {
+    color: #40BBD1;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-icon {
+    transition: background-color 150ms ease-in-out;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"]:hover .like-icon {
+    background-color: rgba(64, 187, 209, 0.1);
+}
+</style>
+
+<body class="bg-white dark:bg-[#2F2E72] flex justify-center">
+
+
+    <!-- Main Wrapper -->
+    <div class="w-full max-w-[90rem] flex">
+        <!-- Mobile Menu (initially hidden) -->
+        <div id="mobile-menu" class="fixed inset-0 z-40 lg:hidden bg-white dark:bg-[#2F2E72] transform translate-x-full transition-transform duration-300">
+            <!-- Add flex and flex-col to create a column layout with justify-between -->
+            <div class="h-full pt-[96px] flex flex-col justify-between"> 
+                <!-- Top section with navigation -->
+                <div class="px-6 py-2">
+                    <!-- Navigation Section -->
+                    <div class="grid grid-cols-1 gap-3">
+                        <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-table-columns  w-5"></i>
+                            <span class="montserrat">Dashboard</span>
+                        </a>
+                        <a href="shranjeno.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-bookmark  w-5"></i>
+                            <span class="montserrat">Shranjeno</span>
+                        </a>
+                        <a href="mentorji.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-users  w-5"></i>
+                            <span class="montserrat">Mentorji</span>
+                        </a>
+                        <a href="masterclass.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fas fa-graduation-cap  w-5"></i>
+                            <span class="montserrat">Masterclass</span>
+                        </a>
+                        <a href="picmim-ai.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-hexagon-nodes  w-5"></i>
+                            <span class="montserrat">PicmimAI</span>
+                        </a>
+                        <a href="trends.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fas fa-chart-line w-5"></i>
+                            <span class="montserrat">Trends</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bottom section with language, theme, and profile -->
+                <div class="px-6 pt-3 pb-6 mt-auto border-t border-gray-200 dark:border-gray-700">
+                    <!-- Language and Theme Switcher in one row -->
+                    <div class="flex items-center justify-between mb-4">
+                        <!-- Language Selector -->
+                        <div class="relative">
+                            <button id="mobile-language-button" 
+                                    class="w-full flex items-center justify-between p-3 rounded-lg transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <img id="mobile-selected-flag" src="https://flagcdn.com/w20/si.png" alt="SI" class="w-6 h-auto">
+                                    <span id="mobile-selected-language" class="font-medium text-sm dark:text-white">Slovenščina</span>
+                                </div>
+                                <i class="ms-2 fas fa-chevron-up text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200"></i>
+                            </button>
+                            
+                            <div id="mobile-language-dropdown" 
+                                 class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-[#2F2E72] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg min-w-40">
+                                <div class="p-1.5 space-y-1">
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="sl">
+                                        <img src="https://flagcdn.com/w20/si.png" alt="Slovenia" class="w-6 h-auto">
+                                        <span class="font-medium">Slovenščina</span>
+                                    </button>
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="en">
+                                        <img src="https://flagcdn.com/w20/gb.png" alt="English" class="w-6 h-auto">
+                                        <span class="font-medium">English</span>
+                                    </button>
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="it">
+                                        <img src="https://flagcdn.com/w20/it.png" alt="Italian" class="w-6 h-auto">
+                                        <span class="font-medium">Italiano</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Theme Switcher -->
+                        <div class="flex w-fit items-center p-1.5 gap-1.5 border dark:border-transparent dark:bg-white/5 rounded-full">
+                            <button 
+                                id="mobile-theme-toggle-light" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="Light theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </button>
+                            <button 
+                                id="mobile-theme-toggle-dark" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="Dark theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </button>
+                            <button 
+                                id="mobile-theme-toggle-system" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="System theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="relative">
+                        <div class="flex items-center justify-between p-2 gap-2 border border-gray-200 dark:border-transparent dark:bg-white/5 rounded-full transition-colors duration-200">
+                            <!-- Left side with profile info -->
+                            <div class="flex items-center">
+                               <img src="2.png" class="w-10 h-10 rounded-full" alt="">
+                                <div class="ml-3">
+                                    <div class="font-semibold montserrat dark:text-white flex items-center gap-2">
+                                        Erik Grozdanov
+                                        <img src="verified-checkmark.svg" class="w-4 h-4" alt="">
+                                    </div>
+                                    <div class="text-gray-500 dark:text-white/70 text-sm">@Grozdanov</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative ml-auto flex gap-2">
+                                <a href="nastavitve.html" class="p-2 hover:bg-black/5 text-black/50 dark:text-white/50 hover:text-black/75 border dark:hover:bg-white/10 dark:border-transparent dark:bg-white/5 rounded-full transition-colors size-10 flex items-center justify-center">
+                                    <i class="fa-solid fa-gear"></i>
+                                </a>
+                                <button class="transition-colors me-1 p-2 flex items-center justify-center">
+                                    <i class="fa-solid fa-right-from-bracket text-black/25 dark:text-white/25"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Left Sidebar (Sticky) -->
+     <!-- Left Sidebar (Sticky) -->
+     <div class="w-1/4 h-screen sticky top-0 bg-white dark:bg-[#2F2E72] text-black dark:text-white p-6 hidden lg:flex flex-col justify-between">
+        <!-- First Section -->
+        <div>
+            <!-- Logo and Theme Section -->
+            <div class="mb-8 flex items-center justify-between">
+            <a href="index.html">
+                <div class="flex items-center">
+                    <img src="all-black.svg" alt="Logo" class="h-8 block dark:hidden">
+                    <img src="all-white.svg" alt="Logo" class="h-8 hidden dark:block">
+                </div>
+                </a>
+            </div>
+
+            <!-- Navigation Section -->
+            <div class="flex flex-col gap-2">
+       
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-table-columns text-lg w-5"></i>
+                    <span class="montserrat text-base">Dashboard</span>
+                </a>
+                <a href="shranjeno.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-bookmark text-lg w-5"></i>
+                    <span class="montserrat text-base">Shranjeno</span>
+                </a>
+                <a href="mentorji.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-users text-lg w-5"></i>
+                    <span class="montserrat text-base">Mentorji</span>
+                </a>
+                <a href="masterclass.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fas fa-graduation-cap text-lg w-5"></i>
+                    <span class="montserrat text-base">Masterclass</span>
+                </a>
+                <a href="picmim-ai.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-hexagon-nodes text-lg w-5"></i>
+                    <span class="montserrat text-base">PicmimAI</span>
+                </a>
+                <a href="trends.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fas fa-chart-line text-lg w-5"></i>
+                    <span class="montserrat text-base">Trends</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Second Section (Profile and Language) -->
+        <div>
+            <div class="flex items-center justify-between mb-3">
+            <!-- Language Selector (Above Profile) -->
+            <div class="relative">
+                <button id="top-language-button" 
+                        class="w-fit flex items-center gap-3 p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        aria-expanded="false">
+                    <img id="top-selected-flag" src="https://flagcdn.com/w20/si.png" alt="SI" class="w-6 h-auto">
+                    <span id="top-selected-language" class="font-medium text-sm dark:text-white">Slovenščina</span>
+                    <!-- Change chevron-down to chevron-up -->
+                    <i class="fas fa-chevron-up text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200"></i>
+                </button>
+                
+                <!-- Update dropdown menu -->
+                <div id="top-language-dropdown" 
+                     class="hidden absolute bottom-full left-0 mb-2 bg-white dark:bg-[#2F2E72] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 min-w-40">
+                    <div class="p-1.5 space-y-1">
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="sl">
+                            <img src="https://flagcdn.com/w20/si.png" alt="Slovenia" class="w-6 h-auto">
+                            <span class="font-medium">Slovenščina</span>
+                        </button>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="en">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="English" class="w-6 h-auto">
+                            <span class="font-medium">English</span>
+                        </button>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="it">
+                            <img src="https://flagcdn.com/w20/it.png" alt="Italian" class="w-6 h-auto">
+                            <span class="font-medium">Italiano</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+                                 <!-- Theme Switcher -->
+                                 <div class="flex items-center p-1.5 gap-1.5 border dark:border-transparent dark:bg-white/5 rounded-full">
+                                    <button 
+                                        id="theme-toggle-light" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="Light theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        id="theme-toggle-dark" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="Dark theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        id="theme-toggle-system" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="System theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+            </div>
+            <!-- Profile Section -->
+            <div class="relative">
+                <div 
+                     class="flex items-center justify-between p-2 gap-2 border border-gray-200 dark:border-transparent dark:bg-white/5 rounded-full transition-colors duration-200"
+                     aria-expanded="false">
+                    <!-- Left side with profile info -->
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-300 to-emerald-700 flex items-center justify-center text-white flex-shrink-0">
+                            <span class="font-bold">EG</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-semibold montserrat flex items-center">
+                                Erik Grozdanov
+                            </div>
+                            <div class="text-gray-500 dark:text-white/70 text-sm">@Grozdanov</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side with three dots -->
+                    <div class="relative ml-auto flex gap-2">
+                        <a href="nastavitve.html" class="p-2 hover:bg-black/5 text-black/50 dark:text-white/50 hover:text-black/75 border dark:hover:bg-white/10 dark:border-transparent dark:bg-white/5 rounded-full transition-colors size-10 flex items-center justify-center">
+                            <i class="fa-solid fa-gear"></i>
+                        </a>
+                        <button class="transition-colors me-1 p-2 flex items-center justify-center">
+                            <i class="fa-solid fa-right-from-bracket text-black/25 dark:text-white/25"></i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+        <!-- Center Content (Scrollable) -->
+        <div class="w-full lg:w-3/4 lg:border-x border-gray-200 dark:border-gray-700">
+            <div class="sticky lg:hidden top-0 z-50 bg-white/80 dark:bg-[#2F2E72]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+                <div class="p-2 gap-2 text-sm lg:text-base flex items-center justify-between">
+                    <div class="block lg:hidden flex justify-between w-full items-center">
+                        <p class="text-gray-600 dark:text-gray-400 lg:block hidden">Deli svoje najkreativnejše ideje z ostalimi</p>
+                          <div class="flex lg:hidden items-center">
+                          <a href="index.html">
+                            <img src="all-black.svg" alt="Logo" class="h-8 block dark:hidden">
+                            <img src="all-white.svg" alt="Logo" class="h-8 hidden dark:block">
+                            </a>
+                        </div>
+                                                  <!-- Mobile Menu Button (visible only on mobile) -->
+        <button id="mobile-menu-button" class="scale-125 z-50 lg:hidden p-2 rounded-lg touch-manipulation">
+            <div id="hamburger-icon" class="w-6 h-6 flex items-center justify-center relative">
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out -translate-y-1.5 rounded-full"></span>
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out rounded-full"></span>
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out translate-y-1.5 rounded-full"></span>
+            </div>
+        </button>
+                        </div>
+                </div>
+            </div> 
+            <div class="bg-gray-50/80 z-10 dark:bg-[#272661]/80 border-b border-gray-200 dark:border-gray-700 backdrop-blur-md sticky top-[81px] lg:hidden block text-black/75 dark:text-white/75">
+                <div class="py-3 px-6 flex justify-between">
+                <a href="index.html" class="flex items-center text-sm gap-3">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 
+                <p class="montserrat">Nazaj na Feed</p>
+                </a>
+                <p class="font-bold text-black dark:text-white montserrat">Nastavitve</p>
+            </div>
+            </a>
+            </div>
+            <div class="hidden lg:block sticky top-0 z-50 bg-white/80 dark:bg-[#2F2E72]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+                <div class="p-2 gap-2">
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-white montserrat">Nastavitve</h1>
+                    <p class="text-gray-600 dark:text-gray-400">Oglej in uredi si informacije ter nastavitve svojega računa</p>
+                </div>
+            </div>
+
+            <!-- Content Area with Settings Menu and Main Content -->
+            <div class="flex">
+                <!-- Left Settings Menu -->
+                <div class="w-80 border-r border-gray-200 dark:border-gray-700 lg:block hidden">
+                    <!-- Settings Menu List -->
+                    <nav class="">
+                        <!-- Your Account Section -->
+                        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="px-4 py-2 text-lg font-semibold text-gray-900 dark:text-white montserrat">Vaš račun</h2>
+                            <div class="space-y-2">
+                                <a href="nastavitve.html" class="flex items-center justify-between px-4 py-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-user text-lg w-6"></i>
+                                        <span>Podatki o računu</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-white/70"></i>
+                                </a>
+                                <a href="nastavitve-varnost.html" class="flex items-center justify-between px-4 py-2 rounded-xl text-white transition-colors bg-[#634391]">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-lock text-lg w-6"></i>
+                                        <span>Varnost in dostop</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </a>
+                                <a href="nastavitve-narocnina.html" class="flex items-center justify-between px-4 py-2 rounded-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fa-solid fa-credit-card text-lg w-6"></i>
+                                        <span>Naročnina</span>
+                                    </div>
+                                    <i class="fas fa-chevron-right text-gray-400"></i>
+                                </a>
+                            </div>
+                        </div>
+
+        
+                    </nav>
+                </div>
+
+                <!-- Main Content Area -->
+                <div class="flex-1 p-6">
+                    <!-- Account Settings Section -->
+                    <div class="max-w-3xl mx-auto">
+                        <!-- Settings Navigation (visible only on mobile) -->
+                        <div class="lg:hidden mb-3">
+                            <div class="relative">
+                                <select onchange="window.location.href=this.value" class="w-full rounded-lg border flex border-gray-200 dark:border-gray-700 bg-gray-50/80 z-10 dark:bg-[#272661]/80 text-gray-900 dark:text-white h-12 px-4 appearance-none pr-10">
+                                    <option value="nastavitve.html" class="p-3">Podatki o računu </option>
+                                    <option value="nastavitve-varnost.html" class="p-3" selected>Varnost in dostop</option>
+                                    <option value="nastavitve-narocnina.html" class="p-3">Naročnina</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700 dark:text-white">
+                                    <i class="fas fa-chevron-down text-sm"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-3 rounded-lg overflow-hidden">
+                            <div class="flex items-center p-4 rounded-lg text-black dark:text-white border dark:border-none dark:bg-white/10">
+                                <i class="fas fa-lock mr-3"></i>
+                                <span class="font-medium">Varnost in dostop</span>
+                            </div>
+                        </div>
+                        <!-- Password Change Section -->
+                        <div class="bg-white dark:bg-[#2F2E72] rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Spremeni geslo</h3>
+                            <form class="space-y-4" id="password-form">
+                                <!-- Current Password -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Trenutno geslo</label>
+                                    <div class="relative">
+                                        <input type="password" 
+                                               id="current-password"
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-black/5 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#40BBD1] transition-all"
+                                               placeholder="Vnesite trenutno geslo">
+                                        <button type="button" 
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <span class="text-red-500 text-sm hidden error-message">Polje ne sme biti prazno</span>
+                                </div>
+
+                                <!-- New Password -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Novo geslo</label>
+                                    <div class="relative">
+                                        <input type="password" 
+                                               id="new-password"
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-black/5 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#40BBD1] transition-all"
+                                               placeholder="Vnesite novo geslo">
+                                        <button type="button" 
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <span class="text-red-500 text-sm hidden error-message">Polje ne sme biti prazno</span>
+                                </div>
+
+                                <!-- Confirm New Password -->
+                                <div class="space-y-2">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Potrdi novo geslo</label>
+                                    <div class="relative">
+                                        <input type="password" 
+                                               id="confirm-password"
+                                               class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-black/5 dark:bg-white/5 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-[#40BBD1] transition-all"
+                                               placeholder="Ponovno vnesite novo geslo">
+                                        <button type="button" 
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200">
+                                            <i class="far fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <span class="text-red-500 text-sm hidden error-message">Polje ne sme biti prazno</span>
+                                </div>
+
+                                <!-- Save Button -->
+                                <div class="pt-2">
+                                    <button type="submit" 
+                                            class="px-6 py-2 bg-[#40BBD1] text-white rounded-lg hover:bg-[#3DBBD1] transition-colors">
+                                        Posodobi geslo
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- 2FA Section -->
+                        <div class="bg-white dark:bg-[#2F2E72] rounded-xl p-6 border border-gray-200 dark:border-gray-700 mt-3">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Dvostopenjska avtentikacija 2FA</h3>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-black/10 peer-focus:outline-none rounded-full peer dark:bg-white/10 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#40BBD1]"></div>
+                                </label>
+                            </div>
+                            
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                                Dvostopenjska avtentikacija doda dodatno plast varnosti vašemu računu. Poleg gesla boste ob prijavi potrebovali tudi kodo iz vaše avtentikacijske aplikacije.
+                            </p>
+
+                            <div class="space-y-4">
+                                <!-- QR Code Section (Initially Hidden) -->
+                                <div class="hidden" id="qr-section">
+                                    <div class="bg-white dark:bg-black/20 p-4 rounded-lg text-center">
+                                        <img src="qr-placeholder.png" alt="QR Code" class="mx-auto mb-3">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            Skenirajte QR kodo z vašo avtentikacijsko aplikacijo
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Verification Code Input (Initially Hidden) -->
+                                <div class="hidden" id="verification-section">
+                                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Verifikacijska koda</label>
+                                    <input type="text" 
+                                           class="w-full px-4 py-2 mt-1 rounded-lg border border-gray-300 dark:border-gray-600 bg-black/5 dark:bg-white/5 text-gray-900 dark:text-white"
+                                           placeholder="Vnesite 6-mestno kodo">
+                                    <button type="button" 
+                                            class="w-full mt-3 px-6 py-2 bg-[#40BBD1] text-white rounded-lg hover:bg-[#3DBBD1] transition-colors">
+                                        Potrdi
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Theme initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleLightBtn = document.getElementById('theme-toggle-light');
+            const themeToggleDarkBtn = document.getElementById('theme-toggle-dark');
+            const themeToggleSystemBtn = document.getElementById('theme-toggle-system');
+            const html = document.documentElement;
+
+            function getSystemTheme() {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches;
+            }
+
+            function updateButtonStates(theme) {
+                const buttons = [themeToggleLightBtn, themeToggleDarkBtn, themeToggleSystemBtn];
+                buttons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                const activeButton = {
+                    'light': themeToggleLightBtn,
+                    'dark': themeToggleDarkBtn,
+                    'system': themeToggleSystemBtn
+                }[theme];
+                
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+            }
+
+            function setTheme(theme) {
+                if (theme === 'system') {
+                    localStorage.removeItem('theme');
+                    if (getSystemTheme()) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                } else {
+                    localStorage.theme = theme;
+                    if (theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+                
+                updateButtonStates(theme);
+            }
+
+            // Initialize theme
+            const currentTheme = localStorage.theme || 'system';
+            setTheme(currentTheme);
+
+            // Add click handlers
+            themeToggleLightBtn.addEventListener('click', () => setTheme('light'));
+            themeToggleDarkBtn.addEventListener('click', () => setTheme('dark'));
+            themeToggleSystemBtn.addEventListener('click', () => setTheme('system'));
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.theme) {
+                    setTheme('system');
+                }
+            });
+        });
+
+        // Profile Dropdown functionality
+        const profileButton = document.getElementById('profile-button');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        let isDropdownOpen = false;
+
+        function toggleDropdown() {
+            isDropdownOpen = !isDropdownOpen;
+            profileButton.setAttribute('aria-expanded', isDropdownOpen);
+            
+            if (isDropdownOpen) {
+                profileDropdown.classList.remove('opacity-0', 'translate-y-2', 'pointer-events-none');
+                profileDropdown.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                profileButton.classList.add('bg-black/5', 'dark:bg-white/5');
+            } else {
+                profileDropdown.classList.add('opacity-0', 'translate-y-2', 'pointer-events-none');
+                profileDropdown.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+                profileButton.classList.remove('bg-black/5', 'dark:bg-white/5');
+            }
+        }
+
+        // Toggle dropdown on button click
+        profileButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (isDropdownOpen && !profileDropdown.contains(e.target)) {
+                toggleDropdown();
+            }
+        });
+
+        // Prevent dropdown from closing when clicking inside it
+        profileDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Character counter functionality
+        const content = document.getElementById('post-content');
+        const charCounter = document.getElementById('char-counter');
+        const postButton = document.getElementById('post-button');
+        const maxLength = 150;
+
+        function countCharacters(text) {
+            // Use Array.from to properly count emoji characters as single units
+            return Array.from(text).length;
+        }
+
+        content.addEventListener('input', function() {
+            // Get text content without HTML tags
+            const text = this.textContent;
+            const trimmedLength = text.trim().length;
+            let currentLength = countCharacters(text);
+            
+            // If the content is empty (only whitespace/breaks), clear it completely
+            if (trimmedLength === 0) {
+                this.textContent = '';
+            }
+
+            // Prevent typing more than maxLength characters
+            if (currentLength > maxLength) {
+                // Keep only the first maxLength characters
+                this.textContent = Array.from(text).slice(0, maxLength).join('');
+                
+                // Place cursor at the end
+                const range = document.createRange();
+                const sel = window.getSelection();
+                range.selectNodeContents(this);
+                range.collapse(false);
+                sel.removeAllRanges();
+                sel.addRange(range);
+                
+                // Update currentLength after truncating
+                currentLength = maxLength;
+            }
+
+            charCounter.textContent = `${currentLength} / ${maxLength}`;
+            
+            // Enable/disable post button based on trimmed content
+            postButton.disabled = trimmedLength === 0 || currentLength > maxLength;
+            
+            // Update counter opacity and color
+            if (currentLength === maxLength) {
+                charCounter.classList.add('opacity-100');
+                charCounter.classList.remove('opacity-50');
+            } else {
+                charCounter.classList.add('opacity-50');
+                charCounter.classList.remove('opacity-100');
+            }
+        });
+
+        // Add paste event handler
+        content.addEventListener('paste', function(e) {
+            e.preventDefault();
+            
+            // Get pasted content as plain text
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            const currentText = this.textContent;
+            
+            // Calculate how much space we have left
+            const spaceLeft = maxLength - currentText.length;
+            
+            // Insert only what will fit
+            const textToInsert = pastedText.slice(0, spaceLeft);
+            
+            // Insert at cursor position
+            const selection = window.getSelection();
+            if (selection.rangeCount) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(document.createTextNode(textToInsert));
+                
+                // Move cursor to end of inserted text
+                range.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+            
+            // Trigger input event to update counter
+            this.dispatchEvent(new Event('input'));
+        });
+
+        // Update the emoji picker style
+        const style = document.createElement('style');
+        style.textContent = `
+            emoji-picker {
+                position: fixed;
+                z-index: 1000;
+                width: 352px;
+                transition: none !important;
+                max-height: 400px; /* Add max-height to prevent it from being too tall */
+                overflow-y: auto; /* Add scroll if content is too tall */
+            }
+            emoji-picker.light {
+                --background: white;
+                --border-color: #e5e7eb;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            }
+            emoji-picker.dark {
+                --background: #1f1f1f;
+                --border-color: #374151;
+                --category-emoji-padding: 0.5rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Update the updatePickerPosition function
+        function updatePickerPosition() {
+            if (!currentEmojiButton || emojiPicker.classList.contains('hidden')) return;
+            
+            const buttonRect = currentEmojiButton.getBoundingClientRect();
+            const pickerWidth = 352; // Fixed width for emoji picker
+            const windowWidth = window.innerWidth;
+            
+            // Check if this is a comment input emoji button
+            const isCommentEmoji = currentEmojiButton.id.startsWith('emoji-button-comment');
+            
+            if (isCommentEmoji) {
+                // Position picker directly under the button
+                let left = buttonRect.right; // Align with right edge of button
+                let top = buttonRect.bottom + 5; // Position below the button
+                
+                emojiPicker.style.position = 'fixed';
+                emojiPicker.style.left = `${left}px`;
+                emojiPicker.style.top = `${top}px`;
+                // Remove margin-left style since we're using the class
+                emojiPicker.style.marginLeft = '';
+            } else {
+                // For the main post composer emoji button
+                let left = Math.max(20, Math.min(buttonRect.left, windowWidth - pickerWidth - 20));
+                let top = buttonRect.bottom + 5;
+                
+                emojiPicker.style.position = 'fixed';
+                emojiPicker.style.left = `${left}px`;
+                emojiPicker.style.top = `${top}px`;
+                emojiPicker.style.marginLeft = ''; // Remove any margin
+            }
+        }
+
+        // Update the emoji picker initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentEmojiPicker = null;
+            let currentEmojiButton = null;
+            const emojiPicker = document.querySelector('emoji-picker');
+            
+            // Add scroll event listener with throttling
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (!ticking) {
+                    window.requestAnimationFrame(() => {
+                        updatePickerPosition();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            }, { passive: true });
+            
+            // Function to update picker position
+            function updatePickerPosition() {
+                if (!currentEmojiButton || emojiPicker.classList.contains('hidden')) return;
+                
+                const buttonRect = currentEmojiButton.getBoundingClientRect();
+                const pickerWidth = 352; // Fixed width for emoji picker
+                const windowWidth = window.innerWidth;
+                
+                // Calculate position relative to viewport - always below the button
+                let left = Math.max(20, Math.min(buttonRect.left, windowWidth - pickerWidth - 20));
+                let top = buttonRect.bottom + 5;
+                
+                // Use fixed positioning relative to viewport
+                emojiPicker.style.position = 'fixed';
+                emojiPicker.style.left = `${left}px`;
+                emojiPicker.style.top = `${top}px`;
+            }
+            
+            // Function to handle emoji button clicks
+            function handleEmojiButtonClick(e, targetInput) {
+                e.stopPropagation();
+                
+                const isHidden = emojiPicker.classList.contains('hidden');
+                const isSameButton = currentEmojiButton === e.currentTarget;
+                const isCommentEmoji = e.currentTarget.id.startsWith('emoji-button-comment');
+                
+                // Always hide the picker first
+                emojiPicker.classList.add('hidden');
+                
+                // If clicking the same button that's currently open, just close it
+                if (!isHidden && isSameButton) {
+                    currentEmojiButton = null;
+                    currentEmojiPicker = null;
+                    emojiPicker.classList.remove('-ms-[320px]'); // Remove margin class
+                    return;
+                }
+                
+                // Show picker for the new button
+                emojiPicker.classList.remove('hidden');
+                emojiPicker.classList.toggle('dark', document.documentElement.classList.contains('dark'));
+                
+                // Add negative margin class for comment input emoji buttons
+                if (isCommentEmoji) {
+                    emojiPicker.classList.add('-ms-[320px]');
+                } else {
+                    emojiPicker.classList.remove('-ms-[320px]');
+                }
+                
+                // Set current button and input
+                currentEmojiButton = e.currentTarget;
+                emojiPicker.dataset.targetInput = targetInput;
+                currentEmojiPicker = e.currentTarget;
+                
+                // Position immediately and after a frame to ensure proper positioning
+                updatePickerPosition();
+                requestAnimationFrame(updatePickerPosition);
+            }
+            
+            // Update the scroll event listener to use passive option for better performance
+            window.addEventListener('scroll', updatePickerPosition, { passive: true });
+            window.addEventListener('resize', updatePickerPosition);
+            
+            // Add click handlers to all emoji buttons
+            document.querySelectorAll('[id^="emoji-button"], [id^="emoji-button-comment"]').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const targetInput = button.closest('article') ? 
+                        button.closest('article').querySelector('input[type="text"]') : 
+                        document.getElementById('post-content');
+                    handleEmojiButtonClick(e, targetInput.id);
+                });
+            });
+
+            // Handle emoji selection
+            emojiPicker.addEventListener('emoji-click', event => {
+                const emoji = event.detail.unicode;
+                const targetInputId = emojiPicker.dataset.targetInput;
+                const targetInput = document.getElementById(targetInputId);
+                
+                if (!targetInput) return;
+                
+                if (targetInput.id === 'post-content') {
+                    // Handle post content (contenteditable div)
+                    const sel = window.getSelection();
+                    if (sel.rangeCount > 0) {
+                        const range = sel.getRangeAt(0);
+                        
+                        if (targetInput.contains(range.commonAncestorContainer)) {
+                            // Insert emoji at cursor position
+                            const textNode = document.createTextNode(emoji);
+                            range.deleteContents();
+                            range.insertNode(textNode);
+                            
+                            // Move cursor after the emoji
+                            range.setStartAfter(textNode);
+                            range.setEndAfter(textNode);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        } else {
+                            // If no valid selection, append to end
+                            const textNode = document.createTextNode(emoji);
+                            targetInput.appendChild(textNode);
+                            
+                            // Move cursor to end
+                            const range = document.createRange();
+                            range.setStartAfter(textNode);
+                            range.setEndAfter(textNode);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        }
+                        targetInput.focus();
+                        targetInput.dispatchEvent(new Event('input'));
+                    }
+                } else {
+                    // Handle regular input fields (comment inputs)
+                    const cursorPos = targetInput.selectionStart;
+                    const textBefore = targetInput.value.substring(0, cursorPos);
+                    const textAfter = targetInput.value.substring(cursorPos);
+                    
+                    targetInput.value = textBefore + emoji + textAfter;
+                    targetInput.selectionStart = cursorPos + emoji.length;
+                    targetInput.selectionEnd = cursorPos + emoji.length;
+                    targetInput.focus();
+                }
+                
+                // Hide picker after selection
+                emojiPicker.classList.add('hidden');
+                currentEmojiPicker = null;
+            });
+
+            // Close emoji picker when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('[id^="emoji-button"]') && 
+                    !emojiPicker.contains(e.target)) {
+                    emojiPicker.classList.add('hidden');
+                    currentEmojiPicker = null;
+                }
+            });
+
+            // Update theme when site theme changes
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName === 'class') {
+                        emojiPicker.classList.toggle('dark', 
+                            document.documentElement.classList.contains('dark')
+                        );
+                    }
+                });
+            });
+
+            observer.observe(document.documentElement, {
+                attributes: true
+            });
+        });
+
+        // Add this event listener to handle the content cleanup
+        content.addEventListener('blur', function() {
+            // If the content is empty or only contains whitespace/breaks
+            if (!this.textContent.trim()) {
+                // Clear any leftover whitespace or breaks
+                this.textContent = '';
+            }
+        });
+
+        // Simplify the format state update function
+        function formatText(format) {
+            const content = document.getElementById('post-content');
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            
+            // Check if the selection is within the content area
+            if (content.contains(range.commonAncestorContainer)) {
+                document.execCommand(format, false, null);
+                content.focus(); // Ensure focus stays in the content area
+            }
+            
+            updateFormatState();
+        }
+
+        // Update the event listeners for the format buttons
+        document.getElementById('post-content').addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'b') {
+                    e.preventDefault();
+                    formatText('bold');
+                } else if (e.key === 'i') {
+                    e.preventDefault();
+                    formatText('italic');
+                }
+            }
+        });
+
+        // Add mouseup event listener to update format state when selecting text
+        document.getElementById('post-content').addEventListener('mouseup', function() {
+            setTimeout(updateFormatState, 0); // Use setTimeout to ensure selection is updated
+        });
+
+        // Update the format state function
+        function updateFormatState() {
+            const isBold = document.queryCommandState('bold');
+            const isItalic = document.queryCommandState('italic');
+            
+            // Update bold button state
+            const boldButton = document.getElementById('bold-button');
+            if (isBold) {
+                boldButton.classList.add('format-active');
+            } else {
+                boldButton.classList.remove('format-active');
+            }
+            
+            // Update italic button state
+            const italicButton = document.getElementById('italic-button');
+            if (isItalic) {
+                italicButton.classList.add('format-active');
+            } else {
+                italicButton.classList.remove('format-active');
+            }
+        }
+
+        // Add click handlers for format buttons
+        document.getElementById('bold-button').addEventListener('click', () => formatText('bold'));
+        document.getElementById('italic-button').addEventListener('click', () => formatText('italic'));
+
+        // Updated calendar functionality
+        const calendarDays = document.getElementById('calendar-days');
+        const currentMonthElement = document.getElementById('current-month');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
+        const eventsList = document.getElementById('events-list');
+
+        let currentDate = new Date();
+        let selectedDate = new Date();
+
+        // Sample booked sessions data
+        const bookedSessions = {
+            // Get today's date for testing
+            [new Date().toISOString().split('T')[0]]: [
+                { time: '14:00', mentor: 'Sarah Johnson', type: 'Fotografska seja' },
+            ],
+            // Tomorrow
+            [new Date(Date.now() + 86400000).toISOString().split('T')[0]]: [
+                { time: '11:30', mentor: 'Mike Chen', type: 'Pregled portfolia' },
+            ]
+        };
+
+        // Update the renderCalendar function
+        function renderCalendar(date) {
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const startingDay = firstDay.getDay();
+            
+            // Get full Slovenian month name
+            const month = date.toLocaleDateString('sl', { 
+                month: 'long'
+            });
+            const year = date.getFullYear();
+            currentMonthElement.textContent = `${month.charAt(0).toUpperCase() + month.slice(1)} ${year}`;
+
+            calendarDays.innerHTML = '';
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayElement = document.createElement('div');
+                const currentDateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const hasSession = bookedSessions[currentDateString]?.length > 0;
+                
+                dayElement.className = `calendar-day ${hasSession ? 'has-event' : ''} 
+                    ${day === selectedDate.getDate() && date.getMonth() === selectedDate.getMonth() ? 'active' : ''}`;
+                
+                dayElement.textContent = day;
+                
+                dayElement.addEventListener('click', () => {
+                    selectedDate = new Date(date.getFullYear(), date.getMonth(), day);
+                    renderCalendar(currentDate);
+                    renderSessions();
+                });
+                
+                calendarDays.appendChild(dayElement);
+            }
+            
+            renderSessions();
+        }
+
+        // Update the renderSessions function
+        function renderSessions() {
+            eventsList.innerHTML = '';
+            
+            const upcomingSessions = Object.entries(bookedSessions)
+                .filter(([date]) => new Date(date) >= new Date().setHours(0, 0, 0, 0))
+                .sort(([dateA], [dateB]) => new Date(dateA) - new Date(dateB))
+                .slice(0, 1);  // Changed from 2 to 1 to show only one event
+
+            if (upcomingSessions.length === 0) {
+                const noSessions = document.createElement('div');
+                noSessions.className = 'text-sm text-gray-600 dark:text-gray-400 text-center py-4';
+                noSessions.textContent = 'Ni prihajajočih dogodkov';
+                eventsList.appendChild(noSessions);
+                return;
+            }
+            
+            upcomingSessions.forEach(([date, sessions]) => {
+                sessions.forEach(session => {
+                    const sessionElement = document.createElement('div');
+                    sessionElement.className = 'event-card flex items-center gap-4';
+                    
+                    const sessionDate = new Date(date);
+                    const formattedDate = new Intl.DateTimeFormat('sl', { 
+                        weekday: 'short', 
+                        day: 'numeric',
+                        month: 'short'
+                    }).format(sessionDate);
+                    
+                    sessionElement.innerHTML = `
+                        <div class="event-icon">
+                            <i class="fas fa-user-clock text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="font-medium text-sm text-gray-900 dark:text-white truncate">${session.type}</div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                                ${formattedDate} · ${session.time} · ${session.mentor}
+                            </div>
+                        </div>
+                    `;
+                    eventsList.appendChild(sessionElement);
+                });
+            });
+        }
+
+        // Initialize calendar
+        renderCalendar(currentDate);
+        
+        // Month navigation
+        prevMonthButton.addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+        
+        nextMonthButton.addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+    </script>
+    <!-- Add this script at the end of the body -->
+    <script>
+        // Initialize Fancybox
+        Fancybox.bind("[data-fancybox]", {
+            // Disable grouping so images open individually
+            groupAll: false,
+            
+            // Customize toolbar
+            Toolbar: {
+                display: {
+                    left: [],
+                    middle: [],
+                    right: ["close"]
+                },
+            },
+            
+            // Custom styling
+            Images: {
+                Panzoom: {
+                    maxScale: 2,
+                }
+            },
+
+            // Custom template for the close button
+            template: {
+                closeButton: '<button data-fancybox-close class="rounded-full p-2 bg-black/50 hover:bg-black/75 transition-colors" title="Close"><svg class="w-6 h-6 text-white" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 20L4 4m16 0L4 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>',
+            },
+
+            // Custom CSS classes
+            l10n: {
+                CLOSE: "Close",
+            },
+        });
+    </script>
+    <!-- Add this script to handle photo uploads -->
+    <script>
+        const photoInput = document.getElementById('photo-input');
+        const mediaContainer = document.getElementById('media-container');
+
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    // Clear existing media
+                    mediaContainer.innerHTML = '';
+                    
+                    // Create wrapper for image and remove button
+                    const mediaWrapper = document.createElement('div');
+                    mediaWrapper.className = 'relative w-fit mx-auto mt-3';
+                    
+                    // Create image preview
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'max-h-[300px] w-auto rounded-xl';
+                    
+                    // Create remove button
+                    const removeButton = document.createElement('button');
+                    removeButton.className = 'absolute top-2 left-2 bg-black/50 hover:bg-black/75 text-white w-8 h-8 flex items-center justify-center rounded-full z-10';
+                    removeButton.innerHTML = '<i class="fa-solid fa-xmark text-sm"></i>';
+                    
+                    // Add click handler to remove button
+                    removeButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        mediaWrapper.remove();
+                        photoInput.value = ''; // Reset the input
+                    });
+                    
+                    // Assemble the components
+                    mediaWrapper.appendChild(img);
+                    mediaWrapper.appendChild(removeButton);
+                    
+                    // Add to container
+                    mediaContainer.appendChild(mediaWrapper);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+    <!-- Add this script before the closing body tag -->
+    <script>
+        // Replace the existing like button script with this
+        document.querySelectorAll('.like-count-wrapper').forEach(wrapper => {
+            const button = wrapper.querySelector('.like-button');
+            const iconElement = wrapper.querySelector('.like-icon i');
+            const countSpan = wrapper.querySelector('.like-count');
+            
+            let isLiked = false;
+            
+            // Function to handle like/unlike state changes
+            const toggleLikeState = () => {
+                isLiked = !isLiked;
+                
+                if (isLiked) {
+                    // Like action
+                    iconElement.classList.remove('fa-regular');
+                    iconElement.classList.add('fa-solid');
+                    wrapper.classList.add('active');
+                    
+                    // Add scale animation
+                    iconElement.classList.add('scale-125');
+                    setTimeout(() => iconElement.classList.remove('scale-125'), 200);
+                    
+                    // Update counter text
+                    const currentCount = parseInt(countSpan.textContent.replace(/,/g, ''));
+                    if (!isNaN(currentCount)) {
+                        countSpan.textContent = (currentCount + 1).toLocaleString();
+                    }
+                } else {
+                    // Unlike action
+                    iconElement.classList.remove('fa-solid');
+                    iconElement.classList.add('fa-regular');
+                    wrapper.classList.remove('active');
+                    
+                    // Add scale animation
+                    iconElement.classList.add('scale-75');
+                    setTimeout(() => iconElement.classList.remove('scale-75'), 200);
+                    
+                    // Update counter text
+                    const currentCount = parseInt(countSpan.textContent.replace(/,/g, ''));
+                    if (!isNaN(currentCount)) {
+                        countSpan.textContent = (currentCount - 1).toLocaleString();
+                    }
+                }
+            };
+            
+            // Add click handler to the wrapper
+            wrapper.addEventListener('click', (e) => {
+                // Only handle clicks for like buttons, not comment counters
+                if (!wrapper.closest('.hover\\:text-\\[\\#40BBD1\\]')) {
+                    e.stopPropagation();
+                    toggleLikeState();
+                }
+            });
+        });
+    </script>
+    <!-- Add this script to handle keyboard shortcuts -->
+    <script>
+        // Add keyboard shortcut listeners
+        document.getElementById('post-content').addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'b') {
+                    e.preventDefault();
+                    formatText('bold');
+                } else if (e.key === 'i') {
+                    e.preventDefault();
+                    formatText('italic');
+                }
+            }
+        });
+
+        // Add this to update format state when content changes
+        document.getElementById('post-content').addEventListener('input', updateFormatState);
+    </script>
+    <!-- Add mouseup event listener to the post-content div -->
+    <script>
+        // ... existing script ...
+
+        // Add mouseup event listener to update format state when selecting text
+        document.getElementById('post-content').addEventListener('mouseup', updateFormatState);
+        
+        // Add click event listener to update format state when clicking inside content
+        document.getElementById('post-content').addEventListener('click', updateFormatState);
+        
+        // Update the formatText function to focus back on the content
+        function formatText(format) {
+            document.execCommand(format, false, null);
+            document.getElementById('post-content').focus();
+            updateFormatState();
+        }
+
+        // ... rest of your script ...
+    </script>
+    <!-- Add this script to handle the dropdowns -->
+    <script>
+        // Handle post menu dropdowns
+        document.querySelectorAll('.post-menu-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Remove active class from all other buttons
+                document.querySelectorAll('.post-menu-btn').forEach(btn => {
+                    if (btn !== button) {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Close any other open dropdowns first
+                document.querySelectorAll('.post-dropdown.show').forEach(dropdown => {
+                    if (dropdown !== button.nextElementSibling) {
+                        dropdown.classList.remove('show');
+                    }
+                });
+                
+                // Toggle current dropdown and active state
+                const dropdown = button.nextElementSibling;
+                dropdown.classList.toggle('show');
+                button.classList.toggle('active');
+            });
+        });
+
+        // Close dropdowns and remove active states when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.post-dropdown') && !e.target.closest('.post-menu-btn')) {
+                document.querySelectorAll('.post-dropdown.show').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                document.querySelectorAll('.post-menu-btn').forEach(button => {
+                    button.classList.remove('active');
+                });
+            }
+        });
+
+        // Add click handler for like counts
+        document.querySelectorAll('.absolute.left-10').forEach(countSpan => {
+            countSpan.addEventListener('click', function() {
+                const likeButton = this.previousElementSibling;
+                likeButton.click(); // Trigger the like button click
+            });
+        });
+    </script>
+    <!-- Add this script at the bottom of the body -->
+    <script>
+        // Add click handlers for share buttons
+        document.querySelectorAll('[aria-label="Deli z drugimi"]').forEach(button => {
+            button.addEventListener('click', async (e) => {
+                const postElement = button.closest('article');
+                const postText = postElement.querySelector('p').textContent;
+                
+                // Create share data object
+                const shareData = {
+                    title: 'PICMIM',
+                    text: postText,
+                    url: window.location.href
+                };
+
+                try {
+                    // Check if the Web Share API is available
+                    if (navigator.share) {
+                        await navigator.share(shareData);
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        // Create a temporary input to copy the URL
+                        const tempInput = document.createElement('input');
+                        tempInput.value = window.location.href;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        
+                        // Show a simple notification that the URL was copied
+                        alert('URL copied to clipboard!');
+                    }
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            });
+        });
+    </script>
+    <!-- Add this script before the closing body tag -->
+    <script>
+        // Function to handle formatting in input fields
+        function formatInputText(input, format) {
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const text = input.value;
+            const selectedText = text.substring(start, end);
+            
+            let formattedText;
+            let newCursorPos;
+            
+            if (format === 'bold') {
+                formattedText = `**${selectedText}**`;
+                newCursorPos = start + 2;
+            } else if (format === 'italic') {
+                formattedText = `_${selectedText}_`;
+                newCursorPos = start + 1;
+            }
+            
+            // Insert the formatted text
+            input.value = text.substring(0, start) + formattedText + text.substring(end);
+            
+            // If no text was selected, place cursor between the markers
+            if (start === end) {
+                input.setSelectionRange(newCursorPos, newCursorPos);
+            } else {
+                // If text was selected, place cursor after the closing marker
+                const endPos = start + formattedText.length;
+                input.setSelectionRange(endPos, endPos);
+            }
+        }
+
+        // Add keyboard shortcut listeners to all comment inputs
+        document.querySelectorAll('input[id^="comment-input-"]').forEach(input => {
+            input.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'b') {
+                        e.preventDefault();
+                        formatInputText(this, 'bold');
+                    } else if (e.key === 'i') {
+                        e.preventDefault();
+                        formatInputText(this, 'italic');
+                    }
+                }
+            });
+        });
+    </script>
+    <!-- Then update the script for formatting -->
+    <script>
+        // Add keyboard shortcut listeners to all comment inputs
+        document.querySelectorAll('div[id^="comment-input-"]').forEach(div => {
+            div.addEventListener('keydown', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    if (e.key === 'b') {
+                        e.preventDefault();
+                        document.execCommand('bold', false, null);
+                    } else if (e.key === 'i') {
+                        e.preventDefault();
+                        document.execCommand('italic', false, null);
+                    }
+                }
+            });
+
+            // Prevent default behavior of Enter key (new line) in comments
+            div.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    // Here you could add logic to submit the comment
+                }
+            });
+
+            // Handle placeholder text
+            div.addEventListener('input', function() {
+                if (this.textContent.trim() === '') {
+                    this.textContent = '';
+                }
+            });
+
+            div.addEventListener('blur', function() {
+                if (this.textContent.trim() === '') {
+                    this.textContent = '';
+                }
+            });
+        });
+    </script>
+    <!-- Add this new script before the closing body tag -->
+    <script>
+        // Function to handle hashtag highlighting in contenteditable div
+        function handleHashtags(element) {
+            if (!element) return;
+
+            // Store selection
+            const selection = window.getSelection();
+            const range = selection.getRangeAt(0);
+            const startOffset = range.startOffset;
+            const endOffset = range.endOffset;
+
+            // Get the current content
+            const content = element.innerHTML;
+            
+            // Create a temporary div to handle the content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+
+            // Remove any existing hashtag spans first
+            const existingHashtags = tempDiv.querySelectorAll('span.hashtag');
+            existingHashtags.forEach(span => {
+                const text = span.textContent;
+                span.replaceWith(text);
+            });
+
+            // Get the text content after removing spans
+            let html = tempDiv.innerHTML;
+            
+            // Replace hashtags with spans - match entire word after #
+            html = html.replace(
+                /(\s|^)#\w+/g,
+                match => {
+                    const space = match.startsWith(' ') ? ' ' : '';
+                    const hashtag = match.trim();
+                    return `${space}<span class="hashtag" contenteditable="false" data-hashtag="${hashtag}">${hashtag}</span>`;
+                }
+            );
+
+            // Only update if content has changed
+            if (element.innerHTML !== html) {
+                element.innerHTML = html;
+            }
+
+            // Restore selection
+            try {
+                const newRange = document.createRange();
+                const textNodes = [];
+                let currentOffset = 0;
+
+                // Collect text nodes
+                function collectTextNodes(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        textNodes.push({ node, offset: currentOffset });
+                        currentOffset += node.length;
+                    } else if (node.nodeType === Node.ELEMENT_NODE && node.classList?.contains('hashtag')) {
+                        currentOffset += node.textContent.length;
+                    } else {
+                        Array.from(node.childNodes).forEach(collectTextNodes);
+                    }
+                }
+
+                element.childNodes.forEach(collectTextNodes);
+
+                // Find appropriate nodes for selection
+                let startNode = element.lastChild;
+                let endNode = element.lastChild;
+                let startNodeOffset = 0;
+                let endNodeOffset = 0;
+
+                for (const { node, offset } of textNodes) {
+                    if (offset <= startOffset && offset + node.length >= startOffset) {
+                        startNode = node;
+                        startNodeOffset = startOffset - offset;
+                    }
+                    if (offset <= endOffset && offset + node.length >= endOffset) {
+                        endNode = node;
+                        endNodeOffset = endOffset - offset;
+                        break;
+                    }
+                }
+
+                // Set the range
+                newRange.setStart(startNode, startNodeOffset);
+                newRange.setEnd(endNode, endNodeOffset);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+            } catch (e) {
+                console.error('Error restoring selection:', e);
+            }
+        }
+
+        // Update the formatText function to prevent formatting hashtags
+        function formatText(format) {
+            const postContent = document.getElementById('post-content');
+            const selection = window.getSelection();
+            
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                
+                // Check if selection contains or intersects with any hashtag
+                let containsHashtag = false;
+                const hashtagSpans = postContent.querySelectorAll('.hashtag');
+                
+                hashtagSpans.forEach(span => {
+                    if (range.intersectsNode(span)) {
+                        containsHashtag = true;
+                    }
+                });
+
+                // Only apply formatting if no hashtags are in the selection
+                if (!containsHashtag && postContent.contains(range.commonAncestorContainer)) {
+                    document.execCommand(format, false, null);
+                    postContent.focus();
+                    updateFormatState();
+                }
+            }
+        }
+
+        // Add event listener to prevent formatting of hashtags
+        document.addEventListener('DOMContentLoaded', function() {
+            const postContent = document.getElementById('post-content');
+            
+            // Prevent any modifications to hashtags
+            postContent.addEventListener('beforeinput', function(e) {
+                const selection = window.getSelection();
+                if (selection.rangeCount > 0) {
+                    const range = selection.getRangeAt(0);
+                    let node = range.startContainer;
+                    
+                    // Check if we're inside or next to a hashtag
+                    while (node && node !== this) {
+                        if (node.nodeType === Node.ELEMENT_NODE && 
+                            (node.classList?.contains('hashtag') || 
+                             node.closest('.hashtag'))) {
+                            e.preventDefault();
+                            return;
+                        }
+                        node = node.parentNode;
+                    }
+                }
+            });
+
+        const debouncedHandleHashtags = debounce((e) => {
+            handleHashtags(e.target);
+        }, 50);
+
+        postContent.addEventListener('input', debouncedHandleHashtags);
+    });
+    </script>
+    <!-- Add this script before the closing body tag -->
+    <script>
+        // Handle save button functionality
+        document.querySelectorAll('.save-button').forEach(button => {
+            let isSaved = false;
+            const icon = button.querySelector('.save-icon i');
+            
+            // Add base transition class
+            icon.classList.add('transform', 'transition-transform', 'duration-200', 'ease-in-out');
+            
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                isSaved = !isSaved;
+                
+                // Add pop animation
+                icon.classList.add('scale-75');
+                
+                setTimeout(() => {
+                    if (isSaved) {
+                        icon.classList.remove('fa-regular');
+                        icon.classList.add('fa-solid', 'text-[#40BBD1]');
+                    } else {
+                        icon.classList.remove('fa-solid', 'text-[#40BBD1]');
+                        icon.classList.add('fa-regular');
+                    }
+                    
+                    icon.classList.remove('scale-75');
+                    icon.classList.add('scale-110');
+                    
+                    setTimeout(() => {
+                        icon.classList.remove('scale-110');
+                    }, 100);
+                }, 100);
+            });
+        });
+    </script>
+    <!-- Update the text formatting JavaScript -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const postContent = document.getElementById('post-content');
+        
+        function formatText(format) {
+            const selection = window.getSelection();
+            
+            // Only proceed if we have a selection
+            if (selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                
+                // Check if the selection is within the post content
+                if (postContent.contains(range.commonAncestorContainer)) {
+                    document.execCommand(format, false, null);
+                    postContent.focus();
+                    updateFormatState();
+                }
+            }
+        }
+
+        function updateFormatState() {
+            const isBold = document.queryCommandState('bold');
+            const isItalic = document.queryCommandState('italic');
+            
+            const boldButton = document.getElementById('bold-button');
+            const italicButton = document.getElementById('italic-button');
+            
+            if (boldButton) {
+                boldButton.classList.toggle('format-active', isBold);
+            }
+            if (italicButton) {
+                italicButton.classList.toggle('format-active', isItalic);
+            }
+        }
+
+        // Add event listeners for format buttons
+        document.getElementById('bold-button')?.addEventListener('click', () => formatText('bold'));
+        document.getElementById('italic-button')?.addEventListener('click', () => formatText('italic'));
+
+        // Add keyboard shortcuts
+        postContent.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                if (e.key === 'b') {
+                    e.preventDefault();
+                    formatText('bold');
+                } else if (e.key === 'i') {
+                    e.preventDefault();
+                    formatText('italic');
+                }
+            }
+        });
+
+        // Update format state when selecting text
+        postContent.addEventListener('mouseup', updateFormatState);
+        postContent.addEventListener('keyup', updateFormatState);
+        
+        // Make formatText available globally
+        window.formatText = formatText;
+    });
+    </script>
+    <!-- Add success notifications -->
+    <!-- Desktop notification -->
+    <div id="desktop-notification" class="fixed flex font-semibold items-center bottom-6 right-6 bg-[#40BBD1] text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[200%] transition-transform duration-300 lg:block hidden">
+        <i class="fa-solid fa-check me-1.5"></i> Geslo je bilo posodobljeno
+    </div>
+
+    <!-- Mobile notification -->
+    <div id="mobile-notification" class="w-fit font-semibold flexitems-center fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#40BBD1] text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-[200%] transition-transform duration-300 lg:hidden">
+        <i class="fa-solid fa-check me-1.5"></i> Geslo je bilo posodobljeno
+    </div>
+
+    <!-- Add these toasts right before the closing body tag -->
+
+    <!-- Desktop toasts -->
+    <div id="desktop-success-toast" class="fixed flex font-semibold items-center bottom-6 right-6 bg-[#40BBD1] text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[200%] transition-transform duration-300 lg:block hidden">
+        <i class="fa-solid fa-check me-1.5"></i> Geslo je bilo posodobljeno
+    </div>
+
+    <div id="desktop-error-toast" class="fixed flex font-semibold items-center bottom-6 right-6 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-[200%] transition-transform duration-300 lg:block hidden">
+        <i class="fa-solid fa-xmark me-1.5"></i> Geslo ne sme biti enako staremu
+    </div>
+
+    <!-- Mobile toasts -->
+    <div id="mobile-success-toast" class="w-fit font-semibold flex items-center fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#40BBD1] text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-[200%] transition-transform duration-300 lg:hidden">
+        <i class="fa-solid fa-check me-1.5"></i> Geslo je bilo posodobljeno
+    </div>
+
+    <div id="mobile-error-toast" class="w-fit font-semibold flex items-center fixed bottom-6 left-1/2 -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-y-[200%] transition-transform duration-300 lg:hidden">
+        <i class="fa-solid fa-xmark me-1.5"></i> Geslo ne sme biti enako staremu
+    </div>
+
+    <!-- Update the form handling script -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('password-form');
+        const inputs = form.querySelectorAll('input[type="password"]');
+        
+        // Get all toast elements
+        const desktopSuccessToast = document.getElementById('desktop-success-toast');
+        const desktopErrorToast = document.getElementById('desktop-error-toast');
+        const mobileSuccessToast = document.getElementById('mobile-success-toast');
+        const mobileErrorToast = document.getElementById('mobile-error-toast');
+
+        // Function to show appropriate toast
+        function showToast(isSuccess) {
+            const isDesktop = window.innerWidth >= 1024;
+            const toast = isDesktop ? 
+                (isSuccess ? desktopSuccessToast : desktopErrorToast) :
+                (isSuccess ? mobileSuccessToast : mobileErrorToast);
+            
+            // Hide any currently visible toasts
+            [desktopSuccessToast, desktopErrorToast, mobileSuccessToast, mobileErrorToast].forEach(t => {
+                t.style.transform = isDesktop ? 'translateX(200%)' : 'translate(-50%, 200%)';
+            });
+
+            // Show the appropriate toast
+            toast.style.transform = isDesktop ? 'translateX(0)' : 'translate(-50%, 0)';
+            
+            // Hide the toast after 3 seconds
+            setTimeout(() => {
+                toast.style.transform = isDesktop ? 'translateX(200%)' : 'translate(-50%, 200%)';
+            }, 3000);
+        }
+
+        // Function to validate inputs and show/hide error messages
+        function validateInput(input) {
+            const errorMessage = input.parentElement.nextElementSibling;
+            if (input.value.trim() === '') {
+                input.classList.add('border-red-500', 'ring-2', 'ring-red-500');
+                errorMessage.classList.remove('hidden');
+                return false;
+            } else {
+                input.classList.remove('border-red-500', 'ring-2', 'ring-red-500');
+                errorMessage.classList.add('hidden');
+                return true;
+            }
+        }
+
+        // Add input event listeners for real-time validation
+        inputs.forEach(input => {
+            input.addEventListener('input', () => validateInput(input));
+        });
+
+        // Handle form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate all inputs are filled
+            let isValid = true;
+            inputs.forEach(input => {
+                if (!validateInput(input)) {
+                    isValid = false;
+                }
+            });
+
+            if (isValid) {
+                // Get password values
+                const currentPassword = document.getElementById('current-password').value;
+                const newPassword = document.getElementById('new-password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                // Check if all passwords are the same
+                if (currentPassword === newPassword && newPassword === confirmPassword) {
+                    showToast(false); // Show error toast
+                    return;
+                }
+
+                // Check if new password and confirm password match
+                if (newPassword === confirmPassword) {
+                    showToast(true); // Show success toast
+                    form.reset(); // Reset form
+                } else {
+                    showToast(false); // Show error toast
+                }
+            }
+        });
+
+        // Toggle password visibility
+        const toggleButtons = document.querySelectorAll('button[type="button"]');
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                const icon = this.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+    });
+    </script>
+    <script>
+        // Function to add color to hashtags
+        function colorHashtags() {
+            // Select all span elements
+            const spans = document.querySelectorAll('span');
+            
+            spans.forEach(span => {
+                // Split the text content into words
+                const words = span.textContent.split(' ');
+                
+                // Process each word
+                const coloredWords = words.map(word => {
+                    // Check if the word starts with a '#' and contains only valid hashtag characters
+                    if (word.startsWith('#') && /^#[a-zA-Z0-9_]+$/.test(word)) {
+                        // Wrap the word in a span with specific color
+                        return `<span style="color: #0077B5;">${word}</span>`; // LinkedIn blue for hashtags
+                    }
+                    return word;
+                });
+                
+                // Rejoin the words with spaces
+                const newText = coloredWords.join(' ');
+                
+                // Replace the span's innerHTML with the new colored version
+                span.innerHTML = newText;
+            });
+        }
+
+        // Event listener to apply color on document load
+        document.addEventListener('DOMContentLoaded', colorHashtags);
+
+        // Optionally, if you want to update colors dynamically as text changes:
+        document.addEventListener('input', colorHashtags);
+    </script>
+</body>
+</html>

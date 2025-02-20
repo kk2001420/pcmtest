@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Izbran mentor/ica: Maja Kovač</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/4b2fb84d86.js" crossorigin="anonymous"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/css/emojimart.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="icon" href="favicon.png">
+    <script src="https://unpkg.com/@joeattardi/emoji-button@4.6.0/dist/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gifler@0.1.0/gifler.min.js"></script>
+    <!-- Add these in the head section, after other CSS/JS imports -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add this in the head section -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class', // This is important!
+            theme: {
+                extend: {
+                    animation: {
+                        gradient: 'gradient 3s ease infinite',
+                        scale: 'scale 200ms ease-in-out',
+                    },
+                    keyframes: {
+                        gradient: {
+                            '0%, 100%': {
+                                'background-position': '0% 50%'
+                            },
+                            '50%': {
+                                'background-position': '100% 50%'
+                            },
+                        },
+                        scale: {
+                            '0%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.25)' },
+                            '100%': { transform: 'scale(1)' }
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Add this script right after the opening <html> tag -->
+    <script>
+        // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+        <script>
+       // Mobile menu functionality
+       document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerIcon = document.getElementById('hamburger-icon');
+            const spans = hamburgerIcon.querySelectorAll('span');
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('translate-x-full');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Transform to X
+                    spans[0].classList.add('translate-y-0', 'rotate-45');
+                    spans[1].classList.add('opacity-0');
+                    spans[2].classList.add('translate-y-0', '-rotate-45');
+                    
+                } else {
+                    mobileMenu.classList.add('translate-x-full');
+                    document.body.style.overflow = '';
+                    
+                    // Reset to hamburger
+                    spans[0].classList.remove('translate-y-0', 'rotate-45');
+                    spans[1].classList.remove('opacity-0');
+                    spans[2].classList.remove('translate-y-0', '-rotate-45');
+                }
+            }
+
+            // Toggle menu on button click
+            mobileMenuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMenu();
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', (e) => {
+                if (isMenuOpen && 
+                    !mobileMenu.contains(e.target) && 
+                    !mobileMenuButton.contains(e.target)) {
+                    toggleMenu();
+                }
+            });
+
+            // Theme initialization for both desktop and mobile
+            const themeButtons = {
+                light: [
+                    document.getElementById('theme-toggle-light'),
+                    document.getElementById('mobile-theme-toggle-light')
+                ],
+                dark: [
+                    document.getElementById('theme-toggle-dark'),
+                    document.getElementById('mobile-theme-toggle-dark')
+                ],
+                system: [
+                    document.getElementById('theme-toggle-system'),
+                    document.getElementById('mobile-theme-toggle-system')
+                ]
+            };
+
+            function updateButtonStates(theme) {
+                // Remove active class from all buttons
+                Object.values(themeButtons).flat().forEach(btn => {
+                    if (btn) btn.classList.remove('active');
+                });
+                
+                // Add active class to current theme buttons
+                themeButtons[theme]?.forEach(btn => {
+                    if (btn) {
+                        btn.classList.add('active');
+                        // Add pop animation
+                        const svg = btn.querySelector('svg');
+                        if (svg) {
+                            svg.style.animation = 'none';
+                            svg.offsetHeight; // Trigger reflow
+                            svg.style.animation = null;
+                        }
+                    }
+                });
+            }
+
+            function setTheme(theme) {
+                if (theme === 'system') {
+                    localStorage.removeItem('theme');
+                    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                } else {
+                    localStorage.theme = theme;
+                    if (theme === 'dark') {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+                updateButtonStates(theme);
+            }
+
+            // Initialize theme
+            const currentTheme = localStorage.theme || 'system';
+            setTheme(currentTheme);
+
+            // Add click handlers for all theme buttons
+            Object.entries(themeButtons).forEach(([theme, buttons]) => {
+                buttons.forEach(btn => {
+                    if (btn) {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            setTheme(theme);
+                        });
+                    }
+                });
+            });
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.theme) {
+                    setTheme('system');
+                }
+            });
+
+            // Language dropdown functionality
+            const mobileLangButton = document.getElementById('mobile-language-button');
+            const mobileLangDropdown = document.getElementById('mobile-language-dropdown');
+            const mobileSelectedFlag = document.getElementById('mobile-selected-flag');
+            const mobileSelectedLanguage = document.getElementById('mobile-selected-language');
+            
+            mobileLangButton?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileLangDropdown?.classList.toggle('hidden');
+            });
+
+            mobileLangDropdown?.querySelectorAll('button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const flagImg = button.querySelector('img');
+                    const langText = button.querySelector('span');
+
+                    if (mobileSelectedFlag && mobileSelectedLanguage) {
+                        mobileSelectedFlag.src = flagImg.src;
+                        mobileSelectedFlag.alt = langText.textContent;
+                        mobileSelectedLanguage.textContent = langText.textContent;
+                    }
+
+                    mobileLangDropdown.classList.add('hidden');
+                });
+            });
+
+            // Close language dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!mobileLangButton?.contains(e.target) && !mobileLangDropdown?.contains(e.target)) {
+                    mobileLangDropdown?.classList.add('hidden');
+                }
+            });
+
+            // Prevent zoom on double tap
+            let lastTap = 0;
+            mobileMenuButton.addEventListener('touchend', function(e) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                
+                if (tapLength < 500 && tapLength > 0) {
+                    e.preventDefault();
+                }
+                lastTap = currentTime;
+            });
+        });
+    
+            // Add this to prevent zoom on double tap
+            document.addEventListener('DOMContentLoaded', function() {
+                // Prevent zoom on double tap
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                let lastTap = 0;
+                
+                mobileMenuButton.addEventListener('touchend', function(e) {
+                    const currentTime = new Date().getTime();
+                    const tapLength = currentTime - lastTap;
+                    
+                    if (tapLength < 500 && tapLength > 0) {
+                        e.preventDefault();
+                    }
+                    lastTap = currentTime;
+                });
+                
+                // Add meta viewport tag to prevent zooming
+                const meta = document.createElement('meta');
+                meta.name = 'viewport';
+                meta.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
+                document.head.appendChild(meta);
+            });
+        </script>
+    <!-- Add this style to ensure hashtags can't be formatted -->
+    <style>
+    .hashtag {
+        color: #AE559A !important;
+        font-weight: normal !important;
+        font-style: normal !important;
+        pointer-events: none;
+        user-select: none;
+    }
+    </style>
+</head>
+<style>
+
+.montserrat{
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+/* Add these new animations */
+@keyframes rotateIn {
+    0% { 
+        transform: rotate(-180deg) scale(0.3);
+        opacity: 0;
+    }
+    100% { 
+        transform: rotate(0) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateOut {
+    0% { 
+        transform: rotate(0) scale(1);
+        opacity: 1;
+    }
+    100% { 
+        transform: rotate(180deg) scale(0.3);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% { 
+        transform: translateY(-10px) scale(0.9);
+        opacity: 0;
+    }
+    100% { 
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+/* Theme toggle button styles - update these */
+.theme-toggle-btn {
+    position: relative;
+    overflow: hidden;
+    color: #6B7280; /* Default color */
+    background: transparent;
+}
+
+/* Active state */
+.theme-toggle-btn.active {
+    color: #40BBD1 !important; /* Primary color when active */
+    background: rgba(64, 187, 209, 0.1) !important; /* Light primary color background */
+}
+
+/* Hover effects */
+.theme-toggle-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+
+.theme-toggle-btn:active::before {
+    opacity: 0.1;
+}
+
+/* Update background transition */
+.theme-toggle-btn {
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1); /* Faster, smoother transition */
+}
+
+.theme-toggle-btn:hover {
+    transform: translateY(-1px);
+}
+
+.theme-toggle-btn:active {
+    transform: translateY(1px);
+}
+
+/* Add these new styles for format buttons */
+.format-active {
+    background-color: #40BBD1 !important;
+    color: white !important;
+}
+
+.format-active i {
+    color: white !important;
+}
+
+/* Add these new styles for post dropdown */
+.post-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 2px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.2s ease-out;
+}
+
+.dark .post-dropdown {
+    background-color: #2F2E72;
+    border-color: #374151;
+}
+
+.post-dropdown.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Add these new styles for post menu button active state */
+.post-menu-btn.active {
+    background-color: rgb(0 0 0 / 0.05);
+}
+
+.dark .post-menu-btn.active {
+    background-color: rgb(255 255 255 / 0.1);
+}
+
+/* Add these new styles for like button interactions */
+.like-count-wrapper {
+    @apply flex items-center cursor-pointer;
+}
+
+.like-button {
+    @apply flex items-center group hover:bg-[#BC71AD]/10 rounded-full transition-all duration-300 ease-in-out;
+}
+
+.like-icon {
+    @apply size-10 flex items-center justify-center rounded-full transition-all duration-300 ease-in-out text-lg;
+}
+
+.like-count {
+    @apply ml-1 transition-colors duration-300;
+}
+
+/* Hover styles for inactive state */
+.like-count-wrapper:not(.active):hover .like-icon i,
+.like-count-wrapper:not(.active):hover .like-count {
+    @apply text-[#BC71AD];
+}
+
+/* Comment button styles */
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-icon i,
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-count {
+    @apply hover:text-[#40BBD1];
+}
+
+.like-count-wrapper.hover\:text-\[\#40BBD1\]:hover .like-icon {
+    @apply text-[#40BBD1];
+}
+
+.like-count-wrapper.hover\:text-\[\#40BBD1\]:hover .like-count {
+    @apply text-[#40BBD1];
+}
+
+/* Add these new styles for like button interactions */
+.like-count-wrapper.active .like-icon i {
+    @apply text-[#BC71AD] fa-solid !important;
+    color: #BC71AD !important; /* Force the color */
+}
+
+.like-count-wrapper.active .like-count {
+    @apply text-[#BC71AD] !important;
+    color: #BC71AD !important; /* Force the color */
+}
+
+/* Add this single, more specific style for active state */
+article .like-count-wrapper.active {
+    .like-icon i {
+        @apply text-[#BC71AD] fa-solid !important;
+    }
+    .like-count {
+        @apply text-[#BC71AD] !important;
+    }
+}
+
+/* Remove any existing theme-toggle-btn transitions */
+</style>
+
+<!-- Update the style section for like animation -->
+<style>
+/* Update the like button animation styles */
+.like-icon i {
+    transform-origin: center;
+    transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1), color 150ms ease-in-out;
+}
+
+/* Update the active state animation */
+.like-count-wrapper.active .like-icon i {
+    animation: likePopScale 400ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Add new keyframes for like pop animation */
+@keyframes likePopScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Rest of your existing styles remain the same */
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] {
+    transition: color 150ms ease-in-out;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"]:hover {
+    color: #40BBD1;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"] .like-icon {
+    transition: background-color 150ms ease-in-out;
+}
+
+.like-count-wrapper[class*="hover:text-[#40BBD1]"]:hover .like-icon {
+    background-color: rgba(64, 187, 209, 0.1);
+}
+</style>
+
+<body class="bg-white dark:bg-[#2F2E72] flex justify-center">
+
+
+    <!-- Main Wrapper -->
+    <div class="w-full max-w-[90rem] flex">
+        <!-- Mobile Menu (initially hidden) -->
+        <div id="mobile-menu" class="fixed inset-0 z-40 lg:hidden bg-white dark:bg-[#2F2E72] transform translate-x-full transition-transform duration-300">
+            <!-- Add flex and flex-col to create a column layout with justify-between -->
+            <div class="h-full pt-[96px] flex flex-col justify-between"> 
+                <!-- Top section with navigation -->
+                <div class="px-6 py-2">
+                    <!-- Navigation Section -->
+                    <div class="grid grid-cols-1 gap-3">
+                        <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-table-columns  w-5"></i>
+                            <span class="montserrat">Dashboard</span>
+                        </a>
+                        <a href="shranjeno.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-bookmark  w-5"></i>
+                            <span class="montserrat">Shranjeno</span>
+                        </a>
+                        <a href="mentorji.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-users  w-5"></i>
+                            <span class="montserrat">Mentorji</span>
+                        </a>
+                        <a href="masterclass.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fas fa-graduation-cap  w-5"></i>
+                            <span class="montserrat">Masterclass</span>
+                        </a>
+                        <a href="picmim-ai.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fa-solid fa-hexagon-nodes  w-5"></i>
+                            <span class="montserrat">PicmimAI</span>
+                        </a>
+                        <a href="trends.html" class="flex items-center space-x-3 px-4 py-3 text-lg font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                            <i class="fas fa-chart-line w-5"></i>
+                            <span class="montserrat">Trends</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Bottom section with language, theme, and profile -->
+                <div class="px-6 pt-3 pb-6 mt-auto border-t border-gray-200 dark:border-gray-700">
+                    <!-- Language and Theme Switcher in one row -->
+                    <div class="flex items-center justify-between mb-4">
+                        <!-- Language Selector -->
+                        <div class="relative">
+                            <button id="mobile-language-button" 
+                                    class="w-full flex items-center justify-between p-3 rounded-lg transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <img id="mobile-selected-flag" src="https://flagcdn.com/w20/si.png" alt="SI" class="w-6 h-auto">
+                                    <span id="mobile-selected-language" class="font-medium text-sm dark:text-white">Slovenščina</span>
+                                </div>
+                                <i class="ms-2 fas fa-chevron-up text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200"></i>
+                            </button>
+                            
+                            <div id="mobile-language-dropdown" 
+                                 class="hidden absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-[#2F2E72] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg min-w-40">
+                                <div class="p-1.5 space-y-1">
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="sl">
+                                        <img src="https://flagcdn.com/w20/si.png" alt="Slovenia" class="w-6 h-auto">
+                                        <span class="font-medium">Slovenščina</span>
+                                    </button>
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="en">
+                                        <img src="https://flagcdn.com/w20/gb.png" alt="English" class="w-6 h-auto">
+                                        <span class="font-medium">English</span>
+                                    </button>
+                                    <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="it">
+                                        <img src="https://flagcdn.com/w20/it.png" alt="Italian" class="w-6 h-auto">
+                                        <span class="font-medium">Italiano</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Theme Switcher -->
+                        <div class="flex w-fit items-center p-1.5 gap-1.5 border dark:border-transparent dark:bg-white/5 rounded-full">
+                            <button 
+                                id="mobile-theme-toggle-light" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="Light theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </button>
+                            <button 
+                                id="mobile-theme-toggle-dark" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="Dark theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                </svg>
+                            </button>
+                            <button 
+                                id="mobile-theme-toggle-system" 
+                                class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                title="System theme"
+                            >
+                                <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="relative">
+                        <div class="flex items-center justify-between p-2 gap-2 border border-gray-200 dark:border-transparent dark:bg-white/5 rounded-full transition-colors duration-200">
+                            <!-- Left side with profile info -->
+                            <div class="flex items-center">
+                               <img src="2.png" class="w-10 h-10 rounded-full" alt="">
+                                <div class="ml-3">
+                                    <div class="font-semibold montserrat dark:text-white flex items-center gap-2">
+                                        Erik Grozdanov
+                                        <img src="verified-checkmark.svg" class="w-4 h-4" alt="">
+                                    </div>
+                                    <div class="text-gray-500 dark:text-white/70 text-sm">@Grozdanov</div>
+                                </div>
+                            </div>
+                            
+                            <div class="relative ml-auto flex gap-2">
+                                <a href="nastavitve.html" class="p-2 hover:bg-black/5 text-black/50 dark:text-white/50 hover:text-black/75 border dark:hover:bg-white/10 dark:border-transparent dark:bg-white/5 rounded-full transition-colors size-10 flex items-center justify-center">
+                                    <i class="fa-solid fa-gear"></i>
+                                </a>
+                                <button class="transition-colors me-1 p-2 flex items-center justify-center">
+                                    <i class="fa-solid fa-right-from-bracket text-black/25 dark:text-white/25"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Left Sidebar (Sticky) -->
+     <!-- Left Sidebar (Sticky) -->
+     <div class="w-1/4 h-screen sticky top-0 bg-white dark:bg-[#2F2E72] text-black dark:text-white p-6 hidden lg:flex flex-col justify-between">
+        <!-- First Section -->
+        <div>
+            <!-- Logo and Theme Section -->
+            <div class="mb-8 flex items-center justify-between">
+            <a href="index.html">
+                <div class="flex items-center">
+                    <img src="all-black.svg" alt="Logo" class="h-8 block dark:hidden">
+                    <img src="all-white.svg" alt="Logo" class="h-8 hidden dark:block">
+                </div>
+                </a>
+            </div>
+
+            <!-- Navigation Section -->
+            <div class="flex flex-col gap-2">
+       
+                <a href="dashboard.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-table-columns text-lg w-5"></i>
+                    <span class="montserrat text-base">Dashboard</span>
+                </a>
+                <a href="shranjeno.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-bookmark text-lg w-5"></i>
+                    <span class="montserrat text-base">Shranjeno</span>
+                </a>
+                <a href="mentorji.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-users text-lg w-5"></i>
+                    <span class="montserrat text-base">Mentorji</span>
+                </a>
+                <a href="masterclass.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fas fa-graduation-cap text-lg w-5"></i>
+                    <span class="montserrat text-base">Masterclass</span>
+                </a>
+                <a href="picmim-ai.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fa-solid fa-hexagon-nodes text-lg w-5"></i>
+                    <span class="montserrat text-base">PicmimAI</span>
+                </a>
+                <a href="trends.html" class="flex items-center space-x-3 px-4 py-3 text-[14px] font-semibold rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors text-black dark:text-white">
+                    <i class="fas fa-chart-line text-lg w-5"></i>
+                    <span class="montserrat text-base">Trends</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Second Section (Profile and Language) -->
+        <div>
+            <div class="flex items-center justify-between mb-3">
+            <!-- Language Selector (Above Profile) -->
+            <div class="relative">
+                <button id="top-language-button" 
+                        class="w-fit flex items-center gap-3 p-3 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                        aria-expanded="false">
+                    <img id="top-selected-flag" src="https://flagcdn.com/w20/si.png" alt="SI" class="w-6 h-auto">
+                    <span id="top-selected-language" class="font-medium text-sm dark:text-white">Slovenščina</span>
+                    <!-- Change chevron-down to chevron-up -->
+                    <i class="fas fa-chevron-up text-xs text-gray-500 dark:text-gray-400 transition-transform duration-200"></i>
+                </button>
+                
+                <!-- Update dropdown menu -->
+                <div id="top-language-dropdown" 
+                     class="hidden absolute bottom-full left-0 mb-2 bg-white dark:bg-[#2F2E72] border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-10 min-w-40">
+                    <div class="p-1.5 space-y-1">
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="sl">
+                            <img src="https://flagcdn.com/w20/si.png" alt="Slovenia" class="w-6 h-auto">
+                            <span class="font-medium">Slovenščina</span>
+                        </button>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="en">
+                            <img src="https://flagcdn.com/w20/gb.png" alt="English" class="w-6 h-auto">
+                            <span class="font-medium">English</span>
+                        </button>
+                        <button class="w-full flex items-center gap-3 px-3 py-2 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-lg transition-colors" data-lang="it">
+                            <img src="https://flagcdn.com/w20/it.png" alt="Italian" class="w-6 h-auto">
+                            <span class="font-medium">Italiano</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+                                 <!-- Theme Switcher -->
+                                 <div class="flex items-center p-1.5 gap-1.5 border dark:border-transparent dark:bg-white/5 rounded-full">
+                                    <button 
+                                        id="theme-toggle-light" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="Light theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        id="theme-toggle-dark" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="Dark theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                                        </svg>
+                                    </button>
+                                    <button 
+                                        id="theme-toggle-system" 
+                                        class="theme-toggle-btn rounded-full p-2 transition-all duration-150 hover:bg-black/10 dark:hover:bg-white/5 active:scale-95"
+                                        title="System theme"
+                                    >
+                                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                        </svg>
+                                    </button>
+                                </div>
+
+            </div>
+            <!-- Profile Section -->
+            <div class="relative">
+                <div 
+                     class="flex items-center justify-between p-2 gap-2 border border-gray-200 dark:border-transparent dark:bg-white/5 rounded-full transition-colors duration-200"
+                     aria-expanded="false">
+                    <!-- Left side with profile info -->
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-300 to-emerald-700 flex items-center justify-center text-white flex-shrink-0">
+                            <span class="font-bold">EG</span>
+                        </div>
+                        <div class="ml-3">
+                            <div class="font-semibold montserrat flex items-center">
+                                Erik Grozdanov
+                            </div>
+                            <div class="text-gray-500 dark:text-white/70 text-sm">@Grozdanov</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right side with three dots -->
+                    <div class="relative ml-auto flex gap-2">
+                        <a href="nastavitve.html" class="p-2 hover:bg-black/5 text-black/50 dark:text-white/50 hover:text-black/75 border dark:hover:bg-white/10 dark:border-transparent dark:bg-white/5 rounded-full transition-colors size-10 flex items-center justify-center">
+                            <i class="fa-solid fa-gear"></i>
+                        </a>
+                        <button class="transition-colors me-1 p-2 flex items-center justify-center">
+                            <i class="fa-solid fa-right-from-bracket text-black/25 dark:text-white/25"></i>
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+        <!-- Center Content (Scrollable) -->
+        <div class="w-full lg:w-3/4 lg:border-x border-gray-200 dark:border-gray-700">
+            <div class="sticky lg:hidden top-0 z-50 bg-white/80 dark:bg-[#2F2E72]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+                <div class="p-2 gap-2 text-sm lg:text-base flex items-center justify-between">
+                    <div class="block lg:hidden flex justify-between w-full items-center">
+                        <p class="text-gray-600 dark:text-gray-400 lg:block hidden">Deli svoje najkreativnejše ideje z ostalimi</p>
+                          <div class="flex lg:hidden items-center">
+                          <a href="index.html">
+                            <img src="all-black.svg" alt="Logo" class="h-8 block dark:hidden">
+                            <img src="all-white.svg" alt="Logo" class="h-8 hidden dark:block">
+                            </a>
+                        </div>
+                                                  <!-- Mobile Menu Button (visible only on mobile) -->
+        <button id="mobile-menu-button" class="scale-125 z-50 lg:hidden p-2 rounded-lg touch-manipulation">
+            <div id="hamburger-icon" class="w-6 h-6 flex items-center justify-center relative">
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out -translate-y-1.5 rounded-full"></span>
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out rounded-full"></span>
+                <span class="absolute block h-0.5 w-5 bg-black dark:bg-white transform transition-all duration-300 ease-in-out translate-y-1.5 rounded-full"></span>
+            </div>
+        </button>
+                        </div>
+                </div>
+            </div> 
+            <div class="bg-gray-50/80 z-10 dark:bg-[#272661]/80 border-b border-gray-200 dark:border-gray-700 backdrop-blur-md sticky top-[81px] lg:hidden block text-black/75 dark:text-white/75">
+                <div class="py-3 px-6 flex justify-between">
+                <a href="index.html" class="flex items-center text-sm gap-3">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> 
+                <p class="montserrat">Nazaj na Feed</p>
+                </a>
+                <p class="font-bold text-black dark:text-white montserrat">Mentor/ica</p>
+            </div>
+            </a>
+            </div>
+            <div class="hidden lg:block sticky top-0 z-50 bg-white/80 dark:bg-[#2F2E72]/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-4 py-3">
+                <div class="p-2 gap-2">
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-white montserrat">Maja Kovač</h1>
+                    <p class="text-gray-600 dark:text-gray-400">Pripravljen/a na sodelovanje</p>
+                </div>
+            </div>
+
+            <!-- Grid container with padding -->
+            <div class="p-6 w-full">
+                <!-- Mentor Profile Section -->
+                <div class="mb-8">
+                    <!-- Profile Header -->
+                    <div class="flex flex-col md:flex-row gap-6 items-start md:items-center mb-6">
+                        <img src="1.png" alt="Maja Kovač" class="w-24 h-24 rounded-full object-cover border-4 border-white dark:border-[#2F2E72] shadow-lg">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h1 class="text-2xl font-bold text-gray-900 dark:text-white montserrat">Maja Kovač</h1>
+                                <div class="flex items-center gap-1 text-[#BC71AD]">
+                                    <i class="fas fa-star"></i>
+                                    <span class="font-semibold">4.9</span>
+                                    <span class="text-gray-500 dark:text-gray-400 text-sm">(128 ocen)</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-600 dark:text-gray-300 mb-3">Strokovnjakinja za digitalni marketing z več kot 10-letnimi izkušnjami. Specializirana za socialna omrežja in vsebinski marketing. Pomagam podjetjem in posameznikom rasti na spletu.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-[#40BBD1]/10 text-[#40BBD1] rounded-full text-sm font-medium">Digitalni Marketing</span>
+                                <span class="px-3 py-1 bg-[#40BBD1]/10 text-[#40BBD1] rounded-full text-sm font-medium">Socialna Omrežja</span>
+                                <span class="px-3 py-1 bg-[#40BBD1]/10 text-[#40BBD1] rounded-full text-sm font-medium">Vsebinski Marketing</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Gallery -->
+                    <div class="grid grid-cols-3 lg:grid-cols-5 gap-3">
+                        <a data-fancybox="gallery" 
+                           href="mentor.jpg"
+                           class="block aspect-9/16 rounded-xl overflow-hidden">
+                            <img src="mentor.jpg" 
+                                 alt="Mentor gallery 1" 
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </a>
+                        <a data-fancybox="gallery" 
+                           href="mentor.jpg"
+                           class="block aspect-9/16 rounded-xl overflow-hidden">
+                            <img src="mentor.jpg" 
+                                 alt="Mentor gallery 2" 
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </a>
+                        <a data-fancybox="gallery" 
+                           href="mentor.jpg"
+                           class="block aspect-9/16 rounded-xl overflow-hidden">
+                            <img src="mentor.jpg" 
+                                 alt="Mentor gallery 3" 
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </a>
+                        <a data-fancybox="gallery" 
+                           href="mentor.jpg"
+                           class="block aspect-9/16 rounded-xl overflow-hidden">
+                            <img src="mentor.jpg" 
+                                 alt="Mentor gallery 4" 
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </a>
+                        <a data-fancybox="gallery" 
+                           href="mentor.jpg"
+                           class="block aspect-9/16 rounded-xl overflow-hidden">
+                            <img src="mentor.jpg" 
+                                 alt="Mentor gallery 5" 
+                                 class="w-full h-full object-cover hover:scale-110 transition-transform duration-300">
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Calendar and Booking Section -->
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-3">
+                    <!-- Calendar Section -->
+                    <div class="md:col-span-5 border dark:border-transparent dark:bg-white/5 rounded-xl p-6 shadow-sm">
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white montserrat">Razpoložljivi dnevi</h2>
+                            <div class="flex gap-3">
+                                <button id="prev-month" class="size-10 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors">
+                                    <i class="fas fa-chevron-left text-gray-600 dark:text-gray-300"></i>
+                                </button>
+                                <button id="next-month" class="size-10 hover:bg-gray-100 dark:hover:bg-white/10 rounded-full transition-colors">
+                                    <i class="fas fa-chevron-right text-gray-600 dark:text-gray-300"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="current-month" class="text-base font-medium text-gray-900 dark:text-white mb-3"></div>
+                        
+                        <!-- Calendar Grid -->
+                        <div class="grid grid-cols-7 gap-1 mb-1 text-xs">
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">PON</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">TOR</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">SRE</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">ČET</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">PET</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">SOB</div>
+                            <div class="text-center font-medium text-gray-600 dark:text-gray-400">NED</div>
+                        </div>
+                        
+                        <div id="calendar-days" class="grid grid-cols-7 gap-1">
+                            <!-- Calendar days will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Time Slots Section -->
+                    <div class="md:col-span-7 bg-white dark:bg-[#2F2E72]/50 shadow-sm p-6 border dark:border-white/10 rounded-lg">
+                        <h2 class="text-lg font-semibold text-gray-900 dark:text-white montserrat mb-3">Razpoložljive ure</h2>
+                        <div id="time-slots" class="space-y-2">
+                            <!-- Initial message when no day is selected -->
+                            <div class="text-center text-gray-600 dark:text-gray-400 py-4">
+                                Izberite dan, če želite preveriti razpložljive ure.
+                            </div>
+                        </div>
+                        <!-- Reservation button (hidden by default) -->
+                        <button id="reserve-button" class="w-fit mt-4 bg-gradient-to-br from-[#40BBD1] to-[#1f7e8f] text-white px-4 py-3 text-sm rounded-lg font-medium hover:opacity-90 transition-opacity montserrat hidden">
+                            Rezerviraj termin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected Booking Summary -->
+                <div id="booking-summary" class="mt-4 bg-white dark:bg-[#2F2E72]/50 rounded-xl p-4 shadow-sm hidden">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-6">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-calendar text-[#40BBD1]"></i>
+                                <div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">Datum</div>
+                                    <div id="summary-date" class="text-sm font-medium text-gray-900 dark:text-white"></div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-clock text-[#40BBD1]"></i>
+                                <div>
+                                    <div class="text-xs text-gray-600 dark:text-gray-400">Čas</div>
+                                    <div id="summary-time" class="text-sm font-medium text-gray-900 dark:text-white"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="confirm-booking" class="bg-gradient-to-r from-[#40BBD1] to-[#634391] text-white px-4 py-2 text-sm rounded-lg font-medium hover:opacity-90 transition-opacity montserrat">
+                            Potrdi rezervacijo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Initialize Fancybox with simplified configuration
+        Fancybox.bind('[data-fancybox="gallery"]', {
+            buttons: [
+                "zoom",
+                "slideShow",
+                "fullScreen",
+                "close"
+            ],
+            wheel: false,
+            transitionEffect: "slide",
+            // Customize options
+            hideScrollbar: true,
+            animated: true,
+            showClass: "fancybox-fadeIn",
+            hideClass: "fancybox-fadeOut",
+            // Dark mode support
+            baseClass: document.documentElement.classList.contains('dark') ? "fancybox-dark" : "",
+        });
+
+        // Update Fancybox theme when dark mode changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    const isDark = document.documentElement.classList.contains('dark');
+                    const fancyboxInstances = document.querySelectorAll('.fancybox__container');
+                    fancyboxInstances.forEach(instance => {
+                        if (isDark) {
+                            instance.classList.add('fancybox-dark');
+                        } else {
+                            instance.classList.remove('fancybox-dark');
+                        }
+                    });
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['class']
+        });
+        
+        // Get DOM elements
+        const calendarDays = document.getElementById('calendar-days');
+        const currentMonthElement = document.getElementById('current-month');
+        const timeSlots = document.getElementById('time-slots');
+        const prevMonthButton = document.getElementById('prev-month');
+        const nextMonthButton = document.getElementById('next-month');
+
+        // Initialize state
+        let selectedTimes = {
+            dates: {},
+            total: 0
+        };
+
+        // Helper function to generate available days and time slots
+        function generateAvailableDays() {
+            const availableDays = {};
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            function formatDate(date) {
+                // Ensure consistent timezone handling
+                const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                return d.toISOString().split('T')[0];
+            }
+
+            // Available dates (next 30 days)
+            const availableDates = [1, 3, 5, 7, 10, 12, 15, 17, 20, 22, 25, 28];
+
+            availableDates.forEach(daysOffset => {
+                const date = new Date();
+                date.setDate(date.getDate() + daysOffset);
+                date.setHours(0, 0, 0, 0);
+                const dateString = formatDate(date);
+                
+                availableDays[dateString] = [
+                    { start: '09:00', end: '10:00', price: 45 },
+                    { start: '10:00', end: '11:00', price: 45 },
+                    { start: '11:00', end: '12:00', price: 45 },
+                    { start: '14:00', end: '15:00', price: 45 }
+                ];
+            });
+
+            return availableDays;
+        }
+
+        function calculateTotal() {
+            return selectedTimeSlots.reduce((total, slot) => total + slot.price, 0);
+        }
+
+        function renderTimeSlots(dateString) {
+            const slots = availableDays[dateString] || [];
+            timeSlots.innerHTML = '';
+            const reserveButton = document.getElementById('reserve-button');
+            
+            if (!dateString) {
+                timeSlots.innerHTML = `
+                    <div class="text-center text-gray-600 dark:text-gray-400 py-4">
+                        Izberite dan, če želite preveriti razpložljive ure.
+                    </div>`;
+                reserveButton.classList.add('hidden');
+                return;
+            }
+            
+            if (slots.length === 0) {
+                timeSlots.innerHTML = `
+                    <div class="text-center text-gray-600 dark:text-gray-400 py-4">
+                        Ni razpoložljivih terminov za izbrani datum
+                    </div>`;
+                reserveButton.classList.add('hidden');
+                return;
+            }
+
+            // Date header
+            const headerSection = document.createElement('div');
+            headerSection.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base font-semibold text-gray-900 dark:text-white">
+                            ${formatDateForDisplay(dateString)}
+                        </h3>
+                    
+                     <div class="text-gray-600 dark:text-gray-400">Izbrano ur: <span class="text-sm font-medium text-gray-900 dark:text-white font-semibold">${selectedTimeSlots.length}</span></div></div>
+            `;
+            timeSlots.appendChild(headerSection);
+
+            // Time slots grid
+            const slotsGrid = document.createElement('div');
+            slotsGrid.className = 'grid grid-cols-1 lg:grid-cols-2 gap-3';
+
+            slots.forEach(slot => {
+                const timeSlot = document.createElement('button');
+                const isSelected = selectedTimeSlots.some(
+                    selected => selected.start === slot.start && selected.date === dateString
+                );
+                
+                timeSlot.className = `w-full p-3 rounded-lg border transition-all duration-200 ${
+                    isSelected 
+                        ? 'bg-[#40BBD1] dark:bg-[#40BBD1]/50 text-white border-[#40BBD1]' 
+                        : 'bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border-gray-200 dark:border-transparent text-gray-900 dark:text-white'
+                }`;
+                
+                timeSlot.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <i class="far fa-clock ${isSelected ? 'text-white' : 'text-[#40BBD1]'}"></i>
+                            <div>
+                                <div class="font-medium">${slot.start} - ${slot.end}</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-medium">${slot.price},00 €</div>
+                            <div class="text-xs ${isSelected ? 'text-white/70' : 'text-gray-500 dark:text-gray-400'}">
+                                na uro
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                timeSlot.addEventListener('click', () => {
+                    const index = selectedTimeSlots.findIndex(
+                        selected => selected.start === slot.start && selected.date === dateString
+                    );
+                    
+                    if (index === -1) {
+                        // Add slot if not selected
+                        selectedTimeSlots.push({ ...slot, date: dateString });
+                        // Sort slots by start time
+                        selectedTimeSlots.sort((a, b) => a.start.localeCompare(b.start));
+                    } else {
+                        // Remove slot if already selected
+                        selectedTimeSlots.splice(index, 1);
+                    }
+                    
+                    renderTimeSlots(dateString);
+                    updateBookingSummary();
+                });
+                
+                slotsGrid.appendChild(timeSlot);
+            });
+
+            timeSlots.appendChild(slotsGrid);
+
+            // Total section after grid
+            const totalSection = document.createElement('div');
+            totalSection.className = 'text-left';
+            totalSection.innerHTML = `
+                <div class="text-lg text-gray-600 dark:text-gray-400 mt-4">Vse skupaj: <span class="ms-1.5 font-bold dark:text-white">${calculateTotal()},00 €</span></div>
+            `;
+            timeSlots.appendChild(totalSection);
+
+            // Show/hide reserve button based on selected time slots
+            if (selectedTimeSlots.length > 0) {
+                reserveButton.classList.remove('hidden');
+            } else {
+                reserveButton.classList.add('hidden');
+            }
+        }
+
+        function updateBookingSummary() {
+            if (selectedDate && selectedTimeSlots.length > 0) {
+                const totalPrice = calculateTotal();
+                summaryDate.textContent = formatDateForDisplay(selectedDate);
+                
+                // Format time range
+                const startTime = selectedTimeSlots[0].start;
+                const endTime = selectedTimeSlots[selectedTimeSlots.length - 1].end;
+                summaryTime.innerHTML = `
+                    <div class="flex flex-col">
+                        <div>${startTime} - ${endTime}</div>
+                        <div class="text-sm text-gray-600 dark:text-gray-400">
+                            ${selectedTimeSlots.length} ${
+                                selectedTimeSlots.length === 1 ? 'ura' : 
+                                selectedTimeSlots.length === 2 ? 'uri' : 
+                                selectedTimeSlots.length === 3 || selectedTimeSlots.length === 4 ? 'ure' : 'ur'
+                            } · ${totalPrice},00 €
+                        </div>
+                    </div>
+                `;
+                
+                bookingSummary.classList.remove('hidden');
+            } else {
+                bookingSummary.classList.add('hidden');
+            }
+        }
+
+        // Initialize calendar and available days
+        const availableDays = generateAvailableDays();
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTimeSlots = [];
+
+        function formatDateForDisplay(dateString) {
+            // Add timezone offset to prevent date from shifting
+            const date = new Date(dateString + 'T00:00:00+00:00');
+            const dayNames = ['nedelja', 'ponedeljek', 'torek', 'sreda', 'četrtek', 'petek', 'sobota'];
+            const monthNames = ['januar', 'februar', 'marec', 'april', 'maj', 'junij', 'julij', 'avgust', 'september', 'oktober', 'november', 'december'];
+            
+            // Adjust for local timezone
+            const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+            
+            const day = dayNames[localDate.getDay()];
+            const dayNum = localDate.getDate();
+            const month = monthNames[localDate.getMonth()];
+            const year = localDate.getFullYear();
+            
+            return `${day}, ${dayNum}. ${month} ${year}`;
+        }
+
+        function renderCalendar(date) {
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const startingDay = firstDay.getDay() || 7; // Convert Sunday (0) to 7
+            
+            const monthNames = ['januar', 'februar', 'marec', 'april', 'maj', 'junij', 'julij', 'avgust', 'september', 'oktober', 'november', 'december'];
+            const month = monthNames[date.getMonth()];
+            currentMonthElement.textContent = `${month.charAt(0).toUpperCase() + month.slice(1)} ${date.getFullYear()}`;
+
+            calendarDays.innerHTML = '';
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 1; i < startingDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'p-2 text-center text-gray-400';
+                calendarDays.appendChild(emptyDay);
+            }
+
+            // Add days of the month
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const dayDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), day));
+                const dateString = dayDate.toISOString().split('T')[0];
+                const isAvailable = availableDays[dateString];
+                
+                const dayElement = document.createElement('button');
+                const isSelected = selectedDate === dateString;
+
+                dayElement.className = `size-10 text-center rounded-full transition-colors relative
+                    ${isAvailable ? 'hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer' : 'text-gray-400 cursor-not-allowed'}
+                    ${isSelected ? 'bg-[#3DBBD1] hover:!bg-[#3DBBD1] text-white' : ''}
+                    ${isAvailable && !isSelected ? 'bg-[#3DBBD1]/10 hover:!bg-[#3DBBD1]/25 text-black dark:text-white' : ''}`;
+                
+                dayElement.textContent = day;
+
+                if (isAvailable) {
+                    dayElement.addEventListener('click', () => {
+                        selectedDate = dateString;
+                        selectedTimeSlots = [];
+                        renderCalendar(currentDate);
+                        renderTimeSlots(dateString);
+                        updateBookingSummary();
+                    });
+                }
+                
+                calendarDays.appendChild(dayElement);
+            }
+        }
+
+        // Initialize calendar
+        renderCalendar(currentDate);
+
+        // Add month navigation
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
+            renderCalendar(currentDate);
+        });
+        
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+            renderCalendar(currentDate);
+        });
+
+        // Add booking confirmation handler
+        document.getElementById('confirm-booking').addEventListener('click', () => {
+            if (selectedDate && selectedTimeSlots.length > 0) {
+                const totalPrice = calculateTotal();
+                alert(`Rezervacija uspešno potrjena!\nSkupni znesek: ${totalPrice},00 €`);
+                // Reset selections after successful booking
+                selectedDate = null;
+                selectedTimeSlots = [];
+                renderCalendar(currentDate);
+                timeSlots.innerHTML = '';
+                bookingSummary.classList.add('hidden');
+            }
+        });
+
+        // Add reserve button handler
+        document.getElementById('reserve-button').addEventListener('click', () => {
+            if (selectedDate && selectedTimeSlots.length > 0) {
+                const totalPrice = calculateTotal();
+                alert(`Rezervacija uspešno potrjena!\nSkupni znesek: ${totalPrice},00 €`);
+                // Reset selections after successful booking
+                selectedDate = null;
+                selectedTimeSlots = [];
+                renderCalendar(currentDate);
+                renderTimeSlots(null); // Pass null to show initial message
+                document.getElementById('reserve-button').classList.add('hidden');
+            }
+        });
+
+        // Function to add color to hashtags
+        function colorHashtags() {
+            // Select all span elements
+            const spans = document.querySelectorAll('span');
+            
+            spans.forEach(span => {
+                // Split the text content into words
+                const words = span.textContent.split(' ');
+                
+                // Process each word
+                const coloredWords = words.map(word => {
+                    // Check if the word starts with a '#' and contains only valid hashtag characters
+                    if (word.startsWith('#') && /^#[a-zA-Z0-9_]+$/.test(word)) {
+                        // Wrap the word in a span with specific color
+                        return `<span style="color: #0077B5;">${word}</span>`; // LinkedIn blue for hashtags
+                    }
+                    return word;
+                });
+                
+                // Rejoin the words with spaces
+                const newText = coloredWords.join(' ');
+                
+                // Replace the span's innerHTML with the new colored version
+                span.innerHTML = newText;
+            });
+        }
+
+        // Event listener to apply color on document load
+        document.addEventListener('DOMContentLoaded', colorHashtags);
+
+        // Optionally, if you want to update colors dynamically as text changes:
+        document.addEventListener('input', colorHashtags);
+    </script>
+</body>
+</html>

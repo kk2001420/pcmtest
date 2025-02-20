@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paketi</title>
+    <link rel="icon" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script src="https://kit.fontawesome.com/4b2fb84d86.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        *, html, body{
+            padding: 0;
+            margin: 0;
+        }
+.montserrat{
+  font-family: "Montserrat", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+    </style>
+</head>
+<body class="bg-gradient-to-br from-black from-10% via-[#302E72] via-50% to-[#634391] to-90% min-h-screen">
+    <div class="container mx-auto p-6">
+        <div class="text-center mt-6 lg:mb-8 mb-6">
+            <h2 class="text-2xl font-bold text-white montserrat">Izberi svoj paket</h2>
+            <p class="text-white/75">Izberi ali zamenjaj paket ter upravljaj naročnino.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            <!-- Start Small Package -->
+            <div class="glass-effect rounded-2xl p-8 text-white relative">
+         <div class="flex items-center justify-between">
+                <h3 class="text-2xl font-bold mb-2 montserrat drop-shadow-md">START SMALL</h3>
+                <i class="fa-solid fa-star text-[#40BBD1] text-3xl drop-shadow-lg" aria-hidden="true"></i>
+            </div>
+                <p class="text-lg mb-4">Začni svojo pot do uspeha</p>
+                <div class="text-3xl font-bold montserrat">
+                    6,99€ <span class="text-sm font-normal">/ mesec</span>
+                </div>
+                <p class="text-sm mb-4">Brez vezave, prekini kadarkoli</p>
+                
+                <ul class="space-y-3 mb-6 text-sm lg:text-base">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-300 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Mentorstvo 1 na 1</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-300 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Feed (Omejen na 150 znakov)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-300 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Masterclass</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-green-300 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Popust 5% na Masterclass dogodke</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-gradient-to-br from-white/10 to-white/50 text-white font-semibold rounded-lg p-3 transition-all duration-300 ease-in-out">
+                    Trenutni paket
+                </button>
+                <button class="mt-6 w-full text-white underline font-semibold rounded-lg transition-all duration-300 ease-in-out hover:brightness-90 hover:drop-shadow-lg"">
+                    Prekliči naročnino
+                </button>
+            </div>
+
+            <!-- Level Up Package -->
+            <div class="glass-effect hover:bg-gradient-to-br hover:from-transparent hover:to-[#AE559A]/20 rounded-2xl p-8 text-white relative border-2 border-[#AE559A]">
+         
+                <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#BC71AD] text-white montserrat font-bold text-sm w-fit px-3.5 py-1.5 rounded-full">
+                    NAJBOLJ PRILJUBLJEN
+                </div>
+      
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl font-bold mb-2 montserrat drop-shadow-md">LEVEL UP</h3>
+                    <i class="fa-solid fa-rocket text-[#BC71AD] text-3xl drop-shadow-lg" aria-hidden="true"></i>
+                </div>
+                <p class="text-lg mb-4">Za resne ustvarjalce vsebin</p>
+                <div class="text-3xl font-bold montserrat">
+                    14,99€ <span class="text-sm font-normal">/ mesec</span>
+                </div>
+                <p class="text-sm mb-4">Brez vezave, prekini kadarkoli</p>
+                
+                <ul class="space-y-3 mb-6 text-sm lg:text-base">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Mentorstvo 1 na 1</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Feed (Neomejen)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Masterclass</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Popust 10% na Masterclass dogodke</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Prioritetna podpora</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-pink-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Osnovna AI orodja</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-gradient-to-br from-[#BC71AD] to-[#AE559A] text-white font-semibold rounded-lg p-3  transition-all duration-300 ease-in-out hover:shadow-[0px_0px_20px_rgba(188,113,173,0.5)] hover:drop-shadow-lg"">
+                    Izberi paket
+                </button>
+            </div>
+
+            <!-- Go Pro Package -->
+            <div class="glass-effect rounded-2xl p-8 text-white relative hover:bg-gradient-to-br hover:from-transparent hover:to-[#ffa600]/5">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-2xl font-bold mb-2 montserrat drop-shadow-md">GO PRO</h3>
+                    <i class="fa-solid fa-crown text-[#EAB308] text-3xl drop-shadow-lg" aria-hidden="true"></i>
+                </div>
+                <p class="text-lg mb-4">Za profesionalne ustvarjalce</p>
+                <div class="text-3xl font-bold montserrat">
+                    29,99€ <span class="text-sm font-normal">/ mesec</span>
+                </div>
+                <p class="text-sm mb-4">Brez vezave, prekini kadarkoli</p>
+                
+                <ul class="space-y-3 mb-6 text-sm lg:text-base">
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Mentorstvo 1 na 1</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Feed (Neomejen)</span>
+                    </li>
+
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Masterclass</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Popust 10% na Masterclass dogodke</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Prioritetna podpora</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Napredna AI orodja</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Verifikacija računa</span>
+                    </li>
+                    <li class="flex items-start">
+                        <svg class="w-5 h-5 text-amber-400 mr-2 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="font-semibold">Ekskluzivni dogodki</span>
+                    </li>
+                </ul>
+                
+                <button class="w-full bg-gradient-to-br from-[#EAB308] to-[#cc6d00]  hover:shadow-[0px_0px_20px_rgba(255,166,0,0.5)] text-white font-semibold rounded-lg p-3 transition-all duration-300 ease-in-out hover:drop-shadow-lg"">
+                    Izberi paket
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
